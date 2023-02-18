@@ -22,10 +22,14 @@ class User {
   String? username;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"] == null ? null : json["id"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    email: json["email"] == null ? null : json["email"],
-    username: json["username"] == null ? null : json["username"],
-  );
+        id: json["id"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        email: json["email"],
+        username: json["username"],
+      );
 }

@@ -12,7 +12,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
 
   String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
-
+  print(token);
   final firstPage = token == '' ? 'LOGIN' : 'HOME';
 
   runApp(MyApp(firstPage: firstPage));

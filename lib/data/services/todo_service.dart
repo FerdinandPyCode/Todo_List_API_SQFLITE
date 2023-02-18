@@ -32,7 +32,7 @@ class TodoService {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
 
-    var response = await Dio().get('${Constant.BASE_URL}todos/' + id,
+    var response = await Dio().get('${Constant.BASE_URL}todos/$id',
         queryParameters: queryParameters,
         options: Options(headers: {"authorization": "Bearer $token"}));
 
@@ -43,7 +43,7 @@ class TodoService {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
 
-    var response = await Dio().patch('${Constant.BASE_URL}todos/' + id,
+    var response = await Dio().patch('${Constant.BASE_URL}todos/$id',
         data: data,
         options: Options(headers: {"authorization": "Bearer $token"}));
 
@@ -54,11 +54,21 @@ class TodoService {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
 
-    var response = await Dio().delete('${Constant.BASE_URL}todos/' + id,
+    var response = await Dio().delete('${Constant.BASE_URL}todos/$id',
         options: Options(headers: {"authorization": "Bearer $token"}));
 
     return Todo.fromJson(response.data);
   }
-
-  
 }
+
+// Post Format
+/**
+ * {
+ "description": "Gazo et Tiako en concert! je ne dois pas rater",
+  "title": "Aller au concert 2",
+  "begined_at": "2022-12-27 12:00:00",
+  "finished_at": "2022-12-28 12:00:00",
+  "deadline_at": "2022-12-29 12:00:00",
+  "priority": "medium"
+}
+ */

@@ -1,71 +1,6 @@
-// To parse this JSON data, do
-//
-//     final post = postFromJson(jsonString);
-
-// import 'dart:convert';
-
-// List<Post> postFromJson(String str) => List<Post>.from(json.decode(str).map((x) => Post.fromJson(x)));
-
-// class Post {
-//   Post({
-//     this.id,
-//     this.content,
-//     this.title,
-//     this.userId,
-//     this.createdAt,
-//     this.updatedAt,
-//     this.user,
-//   });
-
-//   String? id;
-//   String? content;
-//   String? title;
-//   String? userId;
-//   DateTime? createdAt;
-//   DateTime? updatedAt;
-//   User? user;
-
-//   factory Post.fromJson(Map<String, dynamic> json) => Post(
-//     id: json["id"] == null ? null : json["id"],
-//     content: json["content"] == null ? null : json["content"],
-//     title: json["title"] == null ? null : json["title"],
-//     userId: json["user_id"] == null ? null : json["user_id"],
-//     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-//     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-//     user: json["user"] == null ? null : User.fromJson(json["user"]),
-//   );
-// }
-
-// class User {
-//   User({
-//     this.id,
-//     this.createdAt,
-//     this.updatedAt,
-//     this.email,
-//     this.username,
-//   });
-
-//   String? id;
-//   DateTime? createdAt;
-//   DateTime? updatedAt;
-//   String? email;
-//   String? username;
-
-//   factory User.fromJson(Map<String, dynamic> json) => User(
-//     id: json["id"] == null ? null : json["id"],
-//     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-//     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-//     email: json["email"] == null ? null : json["email"],
-//     username: json["username"] == null ? null : json["username"],
-//   );
-// }
-
 import 'dart:convert';
 
-import 'package:todo_app/data/models/AuthenticatedUser.dart';
-
 class Todo {
-  
   String? id;
   String? description;
   String? title;
@@ -75,7 +10,7 @@ class Todo {
   DateTime? updatedAt;
   DateTime? createAt;
   String? priority;
-  User? user;
+  String? user;
   Todo({
     this.id,
     this.description,
@@ -99,7 +34,7 @@ class Todo {
     DateTime? updatedAt,
     DateTime? createAt,
     String? priority,
-    User? user,
+    String? user,
   }) {
     return Todo(
       id: id ?? this.id,
@@ -117,38 +52,38 @@ class Todo {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
-    if(id != null){
+
+    if (id != null) {
       result.addAll({'id': id});
     }
-    if(description != null){
+    if (description != null) {
       result.addAll({'description': description});
     }
-    if(title != null){
+    if (title != null) {
       result.addAll({'title': title});
     }
-    if(beginedAt != null){
+    if (beginedAt != null) {
       result.addAll({'beginedAt': beginedAt!.millisecondsSinceEpoch});
     }
-    if(finishedAt != null){
+    if (finishedAt != null) {
       result.addAll({'finishedAt': finishedAt!.millisecondsSinceEpoch});
     }
-    if(deadlineAt != null){
+    if (deadlineAt != null) {
       result.addAll({'deadlineAt': deadlineAt!.millisecondsSinceEpoch});
     }
-    if(updatedAt != null){
+    if (updatedAt != null) {
       result.addAll({'updatedAt': updatedAt!.millisecondsSinceEpoch});
     }
-    if(createAt != null){
+    if (createAt != null) {
       result.addAll({'createAt': createAt!.millisecondsSinceEpoch});
     }
-    if(priority != null){
+    if (priority != null) {
       result.addAll({'priority': priority});
     }
-    if(user != null){
-      result.addAll({'user': user!.id});
+    if (user != null) {
+      result.addAll({'user': user});
     }
-  
+
     return result;
   }
 
@@ -157,13 +92,23 @@ class Todo {
       id: map['id'],
       description: map['description'],
       title: map['title'],
-      beginedAt: map['beginedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['beginedAt']) : null,
-      finishedAt: map['finishedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['finishedAt']) : null,
-      deadlineAt: map['deadlineAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['deadlineAt']) : null,
-      updatedAt: map['updatedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt']) : null,
-      createAt: map['createAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['createAt']) : null,
+      beginedAt: map['beginedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['beginedAt'])
+          : null,
+      finishedAt: map['finishedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['finishedAt'])
+          : null,
+      deadlineAt: map['deadlineAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['deadlineAt'])
+          : null,
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'])
+          : null,
+      createAt: map['createAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['createAt'])
+          : null,
       priority: map['priority'],
-      user: map['user'] != null ? User.fromJson(map['user']) : null,
+      user: map['user'] ?? "",
     );
   }
 
@@ -179,32 +124,32 @@ class Todo {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Todo &&
-      other.id == id &&
-      other.description == description &&
-      other.title == title &&
-      other.beginedAt == beginedAt &&
-      other.finishedAt == finishedAt &&
-      other.deadlineAt == deadlineAt &&
-      other.updatedAt == updatedAt &&
-      other.createAt == createAt &&
-      other.priority == priority &&
-      other.user == user;
+        other.id == id &&
+        other.description == description &&
+        other.title == title &&
+        other.beginedAt == beginedAt &&
+        other.finishedAt == finishedAt &&
+        other.deadlineAt == deadlineAt &&
+        other.updatedAt == updatedAt &&
+        other.createAt == createAt &&
+        other.priority == priority &&
+        other.user == user;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      description.hashCode ^
-      title.hashCode ^
-      beginedAt.hashCode ^
-      finishedAt.hashCode ^
-      deadlineAt.hashCode ^
-      updatedAt.hashCode ^
-      createAt.hashCode ^
-      priority.hashCode ^
-      user.hashCode;
+        description.hashCode ^
+        title.hashCode ^
+        beginedAt.hashCode ^
+        finishedAt.hashCode ^
+        deadlineAt.hashCode ^
+        updatedAt.hashCode ^
+        createAt.hashCode ^
+        priority.hashCode ^
+        user.hashCode;
   }
 }
 

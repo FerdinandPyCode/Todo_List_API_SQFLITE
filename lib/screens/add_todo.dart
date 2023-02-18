@@ -1,3 +1,4 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/app_input.dart';
@@ -16,25 +17,32 @@ class CreateStackScreem extends StatefulWidget {
 class _CreateStackScreemState extends State<CreateStackScreem> {
   // variable permettant de stocker l'image de l'utilisateur
 
-  final TextEditingController _tileController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _deadLineDateController = TextEditingController();
-  final TextEditingController _niveauController = TextEditingController();
+  TextEditingController tileController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController beginDateController = TextEditingController();
+  TextEditingController deadLineDateController = TextEditingController();
+  TextEditingController niveauController = TextEditingController();
 
   DateTime? currenteDta = DateTime.now();
-
-  String imageUrl = "";
   bool readOnly = false;
   bool typeDevice = true;
 
   Level _levelTask = Level.Low;
   int level = 1;
+  String beginDate = '';
+  String deadDate = '';
 
-  @override
-  void initState() {}
+  // @override
+  // void initState() {}
 
   @override
   void dispose() {
+    beginDateController.dispose();
+    tileController.dispose();
+    descriptionController.dispose();
+    deadLineDateController.dispose();
+    niveauController.dispose();
+
     super.dispose();
   }
 
@@ -56,7 +64,7 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
           children: [
             Container(
               margin: EdgeInsets.symmetric(
-                  horizontal: width * .03, vertical: height * .1),
+                  horizontal: width * .03, vertical: height * .01),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +74,7 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
                       reeadOnly: false,
                       hasSuffix: false,
                       label: 'Title',
-                      controller: _tileController,
+                      controller: tileController,
                       validator: (value) {
                         return null;
                       }),
@@ -80,7 +88,7 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
                       label: 'Description',
                       reeadOnly: false,
                       hasSuffix: false,
-                      controller: _descriptionController,
+                      controller: descriptionController,
                       validator: (value) {
                         return null;
                       }),
@@ -89,21 +97,57 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
                     height: height * .03,
                   ),
 
-                  //Day of birth
-                  AppInput(
-                      hint: currenteDta.toString(),
-                      label: 'Dead line date',
-                      reeadOnly: true,
-                      hasSuffix: true,
-                      suffixIcon: IconButton(
-                          onPressed: () async {
-                            _showDatePicker();
-                          },
-                          icon: const Icon(Icons.calendar_month)),
-                      controller: _deadLineDateController,
-                      validator: (value) {
-                        return null;
-                      }),
+                  // const Padding(
+                  //     padding: EdgeInsets.only(top: 5.0, bottom: 5, left: 8),
+                  //     child: AppText(
+                  //       "Beginning",
+                  //       color: Colors.green,
+                  //       size: 20.0,
+                  //       weight: FontWeight.bold,
+                  //     )),
+                  // DateTimePicker(
+                  //   //controller: beginDateController,
+                  //   type: DateTimePickerType.dateTimeSeparate,
+                  //   dateMask: 'd MMM, yyyy',
+                  //   initialValue: DateTime.now().toString(),
+                  //   firstDate: DateTime.now(),
+                  //   lastDate: DateTime(2100),
+                  //   icon: const Icon(Icons.event),
+                  //   dateLabelText: 'Date',
+                  //   timeLabelText: "Hour",
+                  //   onChanged: (value) {
+                  //     print(value);
+                  //   },
+                  // ),
+
+                  // SizedBox(
+                  //   height: getSize(context).height * 0.03,
+                  // ),
+
+                  const Padding(
+                      padding: EdgeInsets.only(top: 5.0, left: 8, bottom: 5),
+                      child: AppText(
+                        'Deadline',
+                        color: Colors.green,
+                        size: 20.0,
+                        weight: FontWeight.bold,
+                      )),
+
+                  DateTimePicker(
+                    //controller: deadLineDateController,
+                    type: DateTimePickerType.dateTimeSeparate,
+                    dateMask: 'd MMM, yyyy',
+                    initialValue: DateTime.now().toString(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    icon: const Icon(Icons.event),
+                    dateLabelText: 'Deadline Date',
+                    timeLabelText: "Hour",
+                    onChanged: (value) {
+                      deadDate = value;
+                      print(value);
+                    },
+                  ),
                   SizedBox(
                     height: height * .03,
                   ),
@@ -182,41 +226,34 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
                   ),
 
                   SizedBox(
-                    height: height * .03,
+                    height: height * .04,
                   ),
                   //Button of option "modify"
                   Align(
-                    alignment: Alignment.bottomRight,
+                    alignment: Alignment.center,
                     child: InkWell(
                       onTap: (() {
                         setState(() {
                           if (level == 0) {
-                            _niveauController.text = 'Low';
+                            niveauController.text = 'low';
                           } else if (level == 1) {
-                            _niveauController.text = 'Medium';
+                            niveauController.text = 'medium';
                           } else {
-                            _niveauController.text = 'High';
+                            niveauController.text = 'high';
                           }
                         });
-
-                        /*ContactDataBase.createPersonne(personne).then((value){
-                      print(personne.tojson(personne));
-                      if(value!=-1){
-                        Navigator.pushNamed(context,"home");
-                      }
-                    });*/
                       }),
                       child: Container(
                         alignment: Alignment.center,
                         width: width * .3,
                         height: height * .06,
                         decoration: BoxDecoration(
-                            color: AppColors.getblueColor,
+                            color: AppColors.getGreenColor,
                             borderRadius: BorderRadius.circular(20.0),
                             boxShadow: [
                               BoxShadow(
                                   offset: const Offset(0, 3),
-                                  color: AppColors.getBlueNightColor)
+                                  color: AppColors.getGreyColor)
                             ]),
                         child: AppText(
                           'Ajouter',
@@ -241,25 +278,5 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
         )),
       ),
     );
-  }
-
-  Future<void> _showDatePicker() async {
-    /* This fonction display the Date picker and  help to have the Person date
-    setting:No setting for this function
-     */
-
-    DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(), //get today's date
-        firstDate: DateTime(
-            2000), //DateTime.now() - not to allow to choose before today.
-        lastDate: DateTime(2101));
-    if (pickedDate != null) {
-      /*setState(() {
-        _deadLineDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate!);
-      });*/
-    } else {
-      _deadLineDateController.text = currenteDta.toString();
-    }
   }
 }
