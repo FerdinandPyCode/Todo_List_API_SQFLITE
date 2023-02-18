@@ -236,7 +236,12 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
                           });
                           Fluttertoast.showToast(
                               msg: "Todo added sucessfully !",
-                              toastLength: Toast.LENGTH_LONG);
+                              toastLength: Toast.LENGTH_LONG,
+                              backgroundColor: AppColors.getGreenColor,
+                              gravity: ToastGravity.TOP
+                          );
+                          descriptionController.clear();
+                          tileController.clear();
                         }),
                         child: Container(
                           alignment: Alignment.center,
