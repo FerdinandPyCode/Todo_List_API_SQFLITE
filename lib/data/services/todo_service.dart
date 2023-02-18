@@ -11,8 +11,8 @@ class TodoService {
     var response = await Dio().post('${Constant.BASE_URL}todos',
         data: data,
         options: Options(headers: {"authorization": "Bearer $token"}));
-
-    return Todo.fromJson(response.data);
+    print(response.data);
+    return Todo.fromMap(response.data);
   }
 
   static Future<List<Todo>> fetch({queryParameters}) async {

@@ -24,6 +24,17 @@ class Todo {
     this.user,
   });
 
+  factory Todo.initial() => Todo(
+        id: '',
+        description: '',
+        title: '',
+        beginedAt: DateTime.now(),
+        finishedAt: DateTime.now(),
+        deadlineAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        
+      );
+
   Todo copyWith({
     String? id,
     String? description,
