@@ -97,33 +97,7 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
                     height: height * .03,
                   ),
 
-                  // const Padding(
-                  //     padding: EdgeInsets.only(top: 5.0, bottom: 5, left: 8),
-                  //     child: AppText(
-                  //       "Beginning",
-                  //       color: Colors.green,
-                  //       size: 20.0,
-                  //       weight: FontWeight.bold,
-                  //     )),
-                  // DateTimePicker(
-                  //   //controller: beginDateController,
-                  //   type: DateTimePickerType.dateTimeSeparate,
-                  //   dateMask: 'd MMM, yyyy',
-                  //   initialValue: DateTime.now().toString(),
-                  //   firstDate: DateTime.now(),
-                  //   lastDate: DateTime(2100),
-                  //   icon: const Icon(Icons.event),
-                  //   dateLabelText: 'Date',
-                  //   timeLabelText: "Hour",
-                  //   onChanged: (value) {
-                  //     print(value);
-                  //   },
-                  // ),
-
-                  // SizedBox(
-                  //   height: getSize(context).height * 0.03,
-                  // ),
-
+                  
                   const Padding(
                       padding: EdgeInsets.only(top: 5.0, left: 8, bottom: 5),
                       child: AppText(
