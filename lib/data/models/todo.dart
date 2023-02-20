@@ -103,20 +103,20 @@ class Todo {
       id: map['id'],
       description: map['description'],
       title: map['title'],
-      beginedAt: map['beginedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['beginedAt'])
+      beginedAt: map['begined_at'] != null
+          ? DateTime.parse(map['begined_at'])
           : null,
-      finishedAt: map['finishedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['finishedAt'])
+      finishedAt: map['finished_at'] != null
+          ? DateTime.parse(map['finishedAt'])
           : null,
-      deadlineAt: map['deadlineAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['deadlineAt'])
+      deadlineAt: map['deadlineA_at'] != null
+          ? DateTime.parse(map['deadline_at'])
           : null,
-      updatedAt: map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'])
+      updatedAt: map['updated_at'] != null
+          ? DateTime.parse(map['updated_at'])
           : null,
-      createAt: map['createAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createAt'])
+      createAt: map['create_at'] != null
+          ? DateTime.parse(map['create_at'])
           : null,
       priority: map['priority'],
       user: map['user'] ?? "",

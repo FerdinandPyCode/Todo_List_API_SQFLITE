@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todo_app/data/models/todo.dart';
+import 'package:todo_app/data/services/todo_service.dart';
 import 'package:todo_app/utils/app_text.dart';
-import 'package:todo_app/utils/colors.dart';
 
 class ListeTodo extends StatefulWidget {
   const ListeTodo({super.key});
@@ -58,63 +57,49 @@ class _ListeTodoState extends State<ListeTodo> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            clipBehavior: Clip.none,
-            itemCount: allTodos.length,
-            itemBuilder: (context, index) {
-              Todo todo = allTodos[index];
-              return Slidable(
-                key: Key(todo.title!),
-                startActionPane: ActionPane(
-                  dismissible: DismissiblePane(
-                    onDismissed: (() => null),
-                  ),
-                  motion: const StretchMotion(),
-                  children: [
-                    SlidableAction(
-                        backgroundColor: AppColors.getGreenColor,
-                        icon: Icons.edit,
-                        label: 'Modifier',
-                        onPressed: (context) => null),
-                    SlidableAction(
-                        backgroundColor: AppColors.getblueColor,
-                        icon: Icons.archive,
-                        label: 'SMS',
-                        onPressed: (context) => null)
-                  ],
-                ),
-                endActionPane: ActionPane(
-                  dismissible: DismissiblePane(
-                    onDismissed: (() => null),
-                  ),
-                  motion: const BehindMotion(),
-                  children: [
-                    SlidableAction(
-                      label: 'Delete',
-                      backgroundColor: AppColors.getRedColor,
-                      icon: Icons.delete,
-                      onPressed: (context) => null,
-                    )
-                  ],
-                ),
-                child: ListTile(
-                  title: AppText(
-                    allTodos[index].title!,
-                    size: 20,
-                    weight: FontWeight.bold,
-                  ),
-                  subtitle: AppText(allTodos[index].description!),
-                ),
+        child: FutureBuilder(
+          future: TodoService.fetch(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(
+                child: AppText("An error occured"),
               );
-            },
-            separatorBuilder: (context, index) {
-              return const Divider();
-            },
-          ),
+            } else if (snapshot.hasData) {
+              List<Todo> allTodos = snapshot.data ?? [];
+
+              if (allTodos.isEmpty) {
+                return const Center(
+                  child: AppText("No task found !"),
+                );
+              } else {
+                return ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  clipBehavior: Clip.none,
+                  itemCount: allTodos.length,
+                  itemBuilder: (context, index) {
+                    Todo todo = allTodos[index];
+                    return ListTile(
+                      title: AppText(
+                        allTodos[index].title!,
+                        size: 20,
+                        weight: FontWeight.bold,
+                      ),
+                      subtitle: AppText(allTodos[index].description!),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const Divider();
+                  },
+                );
+              }
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
         ),
       ),
     );

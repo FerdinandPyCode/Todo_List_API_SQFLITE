@@ -18,13 +18,14 @@ class TodoService {
   static Future<List<Todo>> fetch({queryParameters}) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
-
+    print("Avant dio........");
     var response = await Dio().get('${Constant.BASE_URL}todos',
         queryParameters: queryParameters,
         options: Options(headers: {"authorization": "Bearer $token"}));
-
+    print(response);
+    print("Après dio");
     return (response.data!['data'] as List)
-        .map((x) => Todo.fromJson(x))
+        .map((x) => Todo.fromMap(x))
         .toList();
   }
 

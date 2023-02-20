@@ -1,5 +1,5 @@
 class Constant {
-  static const BASE_URL = "http://192.168.1.126:3030/";
+  static const BASE_URL = "http://192.168.1.128:3030/";
 
   static const USERNAME_PREF_KEY = "username";
   static const EMAIL_PREF_KEY = "email";

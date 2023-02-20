@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/data/models/AuthenticatedUser.dart';
 import 'package:todo_app/screens/history.dart';
-import 'package:todo_app/screens/home_screen.dart';
 import 'package:todo_app/screens/register_screen.dart';
 import 'package:todo_app/utils/app_func.dart';
 import 'package:todo_app/utils/constants.dart';
@@ -44,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
       emailController.text = "";
       passwordController.text = "";
       Fluttertoast.showToast(msg: "Connexion effectuée avec succès");
-      navigateToNextPage(context, HomeState(), back: false);
+      navigateToNextPage(context, const HomeState(), back: false);
     } on DioError catch (e) {
       Map<String, dynamic> error = e.response?.data;
       if (error.containsKey('message')) {
