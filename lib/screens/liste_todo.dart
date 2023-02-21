@@ -84,7 +84,6 @@ class _ListeTodoState extends State<ListeTodo> {
                     Todo todo = allTodos[index];
                     return ListTile(
                       onTap: () {
-                        print(todo);
                         navigateToNextPage(context, TodoDetail(todo: todo));
                       },
                       title: AppText(
