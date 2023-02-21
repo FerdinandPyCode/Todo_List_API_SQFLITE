@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/utils/constants.dart';
@@ -11,22 +12,27 @@ class TodoService {
     var response = await Dio().post('${Constant.BASE_URL}todos',
         data: data,
         options: Options(headers: {"authorization": "Bearer $token"}));
-    print(response.data);
+    if (kDebugMode) {
+      print(response.data);
+    }
     return Todo.fromMap(response.data);
   }
 
   static Future<List<Todo>> fetch({queryParameters}) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
-    print("Avant dio........");
     var response = await Dio().get('${Constant.BASE_URL}todos',
         queryParameters: queryParameters,
         options: Options(headers: {"authorization": "Bearer $token"}));
-    print(response);
-    print("Après dio");
-    return (response.data!['data'] as List)
-        .map((x) => Todo.fromMap(x))
-        .toList();
+    if (kDebugMode) {
+      print(response.data);
+    }
+    List<Todo> liste = [];
+
+    for (var elt in response.data) {
+      liste.add(Todo.fromMap(elt));
+    }
+    return liste;
   }
 
   static Future<Todo> get(id, {queryParameters}) async {
