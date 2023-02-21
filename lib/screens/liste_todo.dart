@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/data/services/todo_service.dart';
+import 'package:todo_app/screens/detail_todo.dart';
+import 'package:todo_app/utils/app_func.dart';
 import 'package:todo_app/utils/app_text.dart';
 
 class ListeTodo extends StatefulWidget {
@@ -51,7 +53,7 @@ class _ListeTodoState extends State<ListeTodo> {
     return Scaffold(
       appBar: AppBar(
         title: const AppText(
-          "Liste des tâches",
+          "List of todos",
           color: Colors.white,
           size: 22,
         ),
@@ -81,12 +83,14 @@ class _ListeTodoState extends State<ListeTodo> {
                   itemBuilder: (context, index) {
                     Todo todo = allTodos[index];
                     return ListTile(
+                      onTap: () =>
+                          navigateToNextPage(context, TodoDetail(todo: todo)),
                       title: AppText(
-                        allTodos[index].title!,
+                        todo.title!,
                         size: 20,
                         weight: FontWeight.bold,
                       ),
-                      subtitle: AppText(allTodos[index].description!),
+                      subtitle: AppText(todo.description!),
                     );
                   },
                   separatorBuilder: (context, index) {

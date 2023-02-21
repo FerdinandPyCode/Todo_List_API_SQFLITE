@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 navigateToNextPage(context, const ListeTodo());
               },
-              child: const Text("Voir la liste des tâches")),
+              child: const Text("View todo list")),
         ],
       )),
       appBar: AppBar(
