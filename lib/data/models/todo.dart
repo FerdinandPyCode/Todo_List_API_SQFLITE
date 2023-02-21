@@ -107,19 +107,19 @@ class Todo {
           ? DateTime.parse(map['begined_at'])
           : null,
       finishedAt: map['finished_at'] != null
-          ? DateTime.parse(map['finishedAt'])
+          ? DateTime.parse(map['finished_at'])
           : null,
-      deadlineAt: map['deadlineA_at'] != null
+      deadlineAt: map['deadline_at'] != null
           ? DateTime.parse(map['deadline_at'])
           : null,
       updatedAt: map['updated_at'] != null
           ? DateTime.parse(map['updated_at'])
           : null,
-      createAt: map['create_at'] != null
-          ? DateTime.parse(map['create_at'])
+      createAt: map['created_at'] != null
+          ? DateTime.parse(map['created_at'])
           : null,
       priority: map['priority'],
-      user: map['user'] ?? "",
+      user: map['user_id'] ?? "",
     );
   }
 
