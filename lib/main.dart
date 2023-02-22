@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todo_app/screens/history.dart';
+import 'package:todo_app/screens/home_screen.dart';
 import 'package:todo_app/utils/constants.dart';
-
 import 'screens/login_screen.dart';
 
 void main() async {
@@ -11,8 +11,18 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
 
   String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
+
+  String firstPage = 'LOGIN';
+
   print(token);
-  final firstPage = token == '' ? 'LOGIN' : 'HOME';
+  if (token != '') {
+    DateTime? expiryDate = Jwt.getExpiryDate(token);
+
+    if (expiryDate!.millisecondsSinceEpoch >
+        DateTime.now().millisecondsSinceEpoch) {
+      firstPage = "HOME";
+    }
+  }
 
   runApp(MyApp(firstPage: firstPage));
 }

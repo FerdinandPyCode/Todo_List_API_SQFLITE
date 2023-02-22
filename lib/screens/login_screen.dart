@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/data/models/AuthenticatedUser.dart';
-import 'package:todo_app/screens/history.dart';
+import 'package:todo_app/screens/home_screen.dart';
 import 'package:todo_app/screens/register_screen.dart';
 import 'package:todo_app/utils/app_func.dart';
 import 'package:todo_app/utils/constants.dart';
