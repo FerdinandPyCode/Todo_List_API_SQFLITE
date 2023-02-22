@@ -68,16 +68,18 @@ class _HomeState extends State<HomeState> {
       }
     }
 
-    dataMap = {
-      "Commencer": commencer.toDouble(),
-      "En cours": enCours.toDouble(),
-      "Finir": fini.toDouble(),
-    };
+    setState(() {
+      dataMap = {
+        "Commencer": commencer.toDouble(),
+        "En cours": enCours.toDouble(),
+        "Finir": fini.toDouble(),
+      };
 
-    dMap = {
-      "Finir Tôt": finiTot.toDouble(),
-      "Finir en retard": finiRetard.toDouble(),
-    };
+      dMap = {
+        "Finir Tôt": finiTot.toDouble(),
+        "Finir en retard": finiRetard.toDouble(),
+      };
+    });
   }
 
   @override

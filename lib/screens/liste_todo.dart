@@ -13,32 +13,6 @@ class ListeTodo extends StatefulWidget {
 }
 
 class _ListeTodoState extends State<ListeTodo> {
-  List<Todo> allTodos = [
-    Todo(
-        description: 'Oui oui je me lave',
-        title: 'Se laver',
-        beginedAt: DateTime.now(),
-        finishedAt: DateTime.now().add(const Duration(hours: 10))),
-    Todo(description: 'Oui oui je me lave', title: 'Se laver'),
-    Todo(description: 'Oui oui je me lave', title: 'Se laver'),
-    Todo(description: 'Oui oui je me lave', title: 'Se laver'),
-    Todo(description: 'Oui oui je me lave', title: 'Se laver'),
-    Todo(
-        description: 'Oui oui la vie est belle',
-        title: 'Life life is verry good'),
-    Todo(
-        description: 'Oui oui la vie est belle',
-        title: 'Life life is verry good'),
-    Todo(
-        description: 'Oui oui la vie est belle',
-        title: 'Life life is verry good'),
-    Todo(
-        description: 'Oui oui la vie est belle',
-        title: 'Life life is verry good'),
-    Todo(
-        description: 'Oui oui la vie est belle',
-        title: 'Life life is verry good'),
-  ];
 
   @override
   void initState() {
@@ -47,8 +21,6 @@ class _ListeTodoState extends State<ListeTodo> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
