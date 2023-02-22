@@ -102,9 +102,7 @@ class _TodoDetailState extends State<TodoDetail> {
                     child: const AppText("Démarer la tâche"))
                 : todo.finishedAt != null
                     ? const AppText("Tâche accompli")
-                    : todo.beginedAt != null &&
-                            DateTime.now().millisecondsSinceEpoch <
-                                todo.deadlineAt!.millisecondsSinceEpoch
+                    : todo.beginedAt != null && todo.deadlineAt == null
                         ? ElevatedButton(
                             onPressed: () async {
                               setState(() {
