@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:todo_app/screens/add_todo.dart';
@@ -61,7 +60,6 @@ class _HomeState extends State<HomeState> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadPost();
   }
