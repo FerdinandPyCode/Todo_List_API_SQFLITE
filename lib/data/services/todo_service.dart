@@ -49,12 +49,21 @@ class TodoService {
   static Future<Todo> patch(id, data) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
+    if (kDebugMode) {
+      print('------------------------->');
+      print(data);
+      print('------------------------->');
+
+      print('${Constant.BASE_URL}todos/$id');
+    }
 
     var response = await Dio().patch('${Constant.BASE_URL}todos/$id',
         data: data,
         options: Options(headers: {"authorization": "Bearer $token"}));
-
-    return Todo.fromJson(response.data);
+    if (kDebugMode) {
+      print(response);
+    }
+    return Todo.fromMap(response.data);
   }
 
   static Future<Todo> delete(id, data) async {

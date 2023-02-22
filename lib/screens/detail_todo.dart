@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/data/models/todo.dart';
+import 'package:todo_app/data/services/todo_service.dart';
 import 'package:todo_app/utils/app_func.dart';
 import 'package:todo_app/utils/app_text.dart';
 import 'package:todo_app/utils/colors.dart';
@@ -14,6 +15,8 @@ class TodoDetail extends StatefulWidget {
 
 class _TodoDetailState extends State<TodoDetail> {
   Todo todo = Todo.initial();
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -61,7 +64,7 @@ class _TodoDetailState extends State<TodoDetail> {
                   SizedBox(
                     height: getSize(context).height * .02,
                   ),
-                  AppText(todo.deadlineAt.toString()),
+                  AppText(todo.deadlineAt.toString().substring(0, 16)),
                 ],
               ),
             ),
@@ -79,15 +82,51 @@ class _TodoDetailState extends State<TodoDetail> {
             todo.beginedAt == null &&
                     DateTime.now().millisecondsSinceEpoch <
                         todo.deadlineAt!.millisecondsSinceEpoch
-                ? const ElevatedButton(
-                    onPressed: null, child: AppText("Démarer la tâche"))
+                ? ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      print(todo.user);
+                      print(todo);
+                      Map<String, String> map = {
+                        "begined_at": DateTime.now().toString().substring(0, 19)
+                      };
+                      await TodoService.patch(todo.id, map).then((value) {
+                        setState(() {
+                          isLoading = false;
+                          todo = value;
+                        });
+                      });
+                    },
+                    child: const AppText("Démarer la tâche"))
                 : todo.finishedAt != null
                     ? const AppText("Tâche accompli")
                     : todo.beginedAt != null &&
                             DateTime.now().millisecondsSinceEpoch <
                                 todo.deadlineAt!.millisecondsSinceEpoch
-                        ? const ElevatedButton(
-                            onPressed: null, child: AppText("Finir la tâche"))
+                        ? ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              Map<String, String> map = {
+                                "finished_at":
+                                    DateTime.now().toString().substring(0, 19)
+                              };
+                              await TodoService.patch(todo.id, map)
+                                  .then((value) {
+                                setState(() {
+                                  isLoading = false;
+                                  todo = value;
+                                });
+                              });
+                            },
+                            child: isLoading
+                                ? CircularProgressIndicator(
+                                    color: AppColors.getWhiteColor,
+                                  )
+                                : const AppText("Finir la tâche"))
                         : todo.finishedAt == null &&
                                 DateTime.now().millisecondsSinceEpoch >
                                     todo.deadlineAt!.millisecondsSinceEpoch
