@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/data/models/todo.dart';
+import 'package:todo_app/data/services/sql_database.dart';
 import 'package:todo_app/utils/constants.dart';
 
 class TodoService {
@@ -12,11 +13,22 @@ class TodoService {
     var response = await Dio().post('${Constant.BASE_URL}todos',
         data: data,
         options: Options(headers: {"authorization": "Bearer $token"}));
+
+        // Appel à la fonction d'enregistrement de la tâche dans la base de donnée sql
+        TodoDataBase.createTodo(data).then((value) {
+          if (value!=0){
+            print("La tache a été enregistré dans la base de donnné avec l'identifiant $value");
+          }else{
+            print("Erreur d'enregistrement ");
+          }
+          
+        });
     if (kDebugMode) {
       print(response.data);
     }
     return Todo.fromMap(response.data);
   }
+
 
   static Future<List<Todo>> fetch({queryParameters}) async {
     final prefs = await SharedPreferences.getInstance();
@@ -50,6 +62,14 @@ class TodoService {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
     if (kDebugMode) {
+      //Mise à jour dans la base de donnée
+      TodoDataBase.updateTodo(id).then((value){
+        if(value!=0){
+          print("Todo mise à jour ");
+        }else{
+          print("Todo non mise à jour ");
+        }
+      });
       print('------------------------->');
       print(data);
       print('------------------------->');
@@ -72,7 +92,14 @@ class TodoService {
 
     var response = await Dio().delete('${Constant.BASE_URL}todos/$id',
         options: Options(headers: {"authorization": "Bearer $token"}));
-
+        // Supression du Todo dans la base donnée 
+        TodoDataBase.deleteTodo(id).then((value) {
+          if(value!=0){
+            print('Reussi');
+          }{
+            print("rejeté");
+          }
+        });
     return Todo.fromJson(response.data);
   }
 }

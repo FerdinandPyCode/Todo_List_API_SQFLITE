@@ -95,6 +95,14 @@ class User {
         username: json["username"],
       );
 
+Map<String, dynamic> tojson() {
+    return {
+      'email': email,
+      'username': username,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt
+    };
+  }
   // Map<String, dynamic> toMap(User user) {
   //   Map<String, dynamic> map = {
   //     "id":id,
