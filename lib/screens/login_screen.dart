@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/data/models/AuthenticatedUser.dart';
 import 'package:todo_app/screens/home_screen.dart';
 import 'package:todo_app/screens/register_screen.dart';
 import 'package:todo_app/utils/app_func.dart';
+import 'package:todo_app/utils/colors.dart';
 import 'package:todo_app/utils/constants.dart';
 
 import '../data/services/users_service.dart';
@@ -62,101 +64,124 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Text(
-              "Connexion",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                  color: Colors.green),
-            ),
-            Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                          hintText: "Entrez votre e-mail",
-                          labelText: "E-mail",
-                          icon: Icon(Icons.alternate_email)),
-                      validator: (value) {
-                        return value == null || value == ""
-                            ? "Ce champs est obligatoire"
-                            : null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    TextFormField(
-                      controller: passwordController,
-                      keyboardType: TextInputType.text,
-                      obscureText: !_passwordVisible,
-                      decoration: InputDecoration(
-                        hintText: "Entrez votre mot de passe",
-                        labelText: "Mot de passe",
-                        icon: const Icon(Icons.lock),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisible = !_passwordVisible;
-                            });
-                          },
-                          icon: _passwordVisible
-                              ? const Icon(Icons.visibility_off)
-                              : const Icon(Icons.visibility),
-                        ),
-                      ),
-                      validator: (value) {
-                        return value == null || value == ""
-                            ? "Ce champs est obligatoire"
-                            : null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    ElevatedButton(
-                        onPressed: () async {
-                          if (!isLoading && formKey.currentState!.validate()) {
-                            await _login(
-                                emailController.text, passwordController.text);
-                          }
-                        },
-                        child: isLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 3,
-                                ))
-                            : const Text("Se connecter"))
-                  ],
-                )),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegisterScreen()));
-                },
-                child: const Text(
-                  "Pas de Compte? Créer un compte",
-                  style: TextStyle(fontSize: 17, color: Colors.green),
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          child: SingleChildScrollView( 
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 30.0,
                 ),
-              ),
-            )
-          ],
+                 Center(
+                  child: Text(
+                    "Connexion",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,color: AppColors.getGreenColor),
+                  ),
+                ),
+                const SizedBox(height: 16.0,),
+                Center(
+                  child: SvgPicture.asset(
+                    'assets/login.svg',
+                    width: MediaQuery.of(context).size.width, 
+                    height: 320,
+                  ),
+                ),
+                 const SizedBox(height: 16.0,),
+                const Text(
+                  "Get Login From Here",
+                  style: TextStyle(fontSize: 12.0),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(
+                              hintText: "Entrez votre e-mail",
+                              labelText: "E-mail",
+                              icon: Icon(Icons.alternate_email)),
+                          validator: (value) {
+                            return value == null || value == ""
+                                ? "Ce champs est obligatoire"
+                                : null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        TextFormField(
+                          controller: passwordController,
+                          keyboardType: TextInputType.text,
+                          obscureText: !_passwordVisible,
+                          decoration: InputDecoration(
+                            hintText: "Entrez votre mot de passe",
+                            labelText: "Mot de passe",
+                            icon: const Icon(Icons.lock),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
+                              icon: _passwordVisible
+                                  ? const Icon(Icons.visibility_off)
+                                  : const Icon(Icons.visibility),
+                            ),
+                          ),
+                          validator: (value) {
+                            return value == null || value == ""
+                                ? "Ce champs est obligatoire"
+                                : null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              if (!isLoading && formKey.currentState!.validate()) {
+                                await _login(
+                                    emailController.text, passwordController.text);
+                              }
+                            },
+                            child: isLoading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 3,
+                                    ))
+                                : const Text("Se connecter"))
+                      ],
+                    )),
+                Align(
+                  alignment: Alignment.center,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RegisterScreen()));
+                    },
+                    child: const Text(
+                      "Pas de Compte? Créer un compte",
+                      style: TextStyle(fontSize: 17, color: Colors.green),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

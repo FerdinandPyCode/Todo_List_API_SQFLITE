@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/data/services/users_service.dart';
 import 'package:todo_app/screens/login_screen.dart';
+import 'package:todo_app/utils/colors.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -61,17 +62,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                const Center(
-                  child: const Text(
+                 Center(
+                  child:  Text(
                     "Inscription",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,color: AppColors.getGreenColor),
                   ),
                 ),
-                const SizedBox(height: 12.0,),
-                SvgPicture.asset(
-                  'assets/register.svg',
-                  width: MediaQuery.of(context).size.width, 
-                  height: 320,
+                const SizedBox(height: 16.0,),
+                Center(
+                  child: SvgPicture.asset(
+                    'assets/register.svg',
+                    width: MediaQuery.of(context).size.width, 
+                    height: 320,
+                  ),
                 ),
                  const SizedBox(height: 16.0,),
                 const Text(
@@ -218,7 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     )),
                 Align(
-                  alignment: Alignment.centerRight,
+                  alignment: Alignment.center,
                   child: TextButton(
                     onPressed: () {
                       Navigator.push(

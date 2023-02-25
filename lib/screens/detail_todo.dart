@@ -26,111 +26,142 @@ class _TodoDetailState extends State<TodoDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const AppText(
-          "Detail todo",
-          color: Colors.white,
-          size: 22,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const AppText(
+            "Detail todo",
+            color: Colors.white,
+            size: 22,
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: getSize(context).width * 0.1),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: getSize(context).height * .05,
-            ),
-            Center(
-              child: AppText(
-                todo.title!,
-                size: 22,
-                weight: FontWeight.bold,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: getSize(context).height * .05,
               ),
-            ),
-            SizedBox(
-              height: getSize(context).height * .09,
-            ),
-            AppText(todo.description!),
-            SizedBox(
-              height: getSize(context).height * .09,
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Column(
-                children: [
-                  const AppText("Deadline Date"),
-                  SizedBox(
-                    height: getSize(context).height * .02,
-                  ),
-                  AppText(todo.deadlineAt.toString().substring(0, 16)),
-                ],
+              Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                color: AppColors.getGreenColor2,
+                height: 50.0,
+                child: AppText("Todo Title",size: 25.0,weight: FontWeight.bold,),
               ),
-            ),
-            SizedBox(
-              height: getSize(context).height * .05,
-            ),
-            AppText(
-              "Todo State",
-              color: AppColors.getGreenColor,
-              size: 20,
-            ),
-            SizedBox(
-              height: getSize(context).height * .03,
-            ),
-            todo.beginedAt == null &&
-                    DateTime.now().millisecondsSinceEpoch <
-                        todo.deadlineAt!.millisecondsSinceEpoch
-                ? ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      print(todo.user);
-                      print(todo);
-                      Map<String, String> map = {
-                        "begined_at": DateTime.now().toString().substring(0, 19)
-                      };
-                      await TodoService.patch(todo.id, map).then((value) {
-                        setState(() {
-                          isLoading = false;
-                          todo = value;
-                        });
-                      });
-                    },
-                    child: const AppText("Démarer la tâche"))
-                : todo.finishedAt != null
-                    ? const AppText("Tâche accompli")
-                    : todo.beginedAt != null && todo.deadlineAt == null
-                        ? ElevatedButton(
-                            onPressed: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              Map<String, String> map = {
-                                "finished_at":
-                                    DateTime.now().toString().substring(0, 19)
-                              };
-                              await TodoService.patch(todo.id, map)
-                                  .then((value) {
+              const SizedBox(height: 15.0,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: AppText(
+                  todo.title!,
+                  size: 20,
+                  weight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: getSize(context).height * .09,
+              ),Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                color: AppColors.getGreenColor2,
+                height: 50.0,
+                child: AppText("Todo Description",size: 25.0,weight: FontWeight.bold,),
+              ),
+              const SizedBox(height: 15.0,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: AppText(
+                  todo.description!,
+                  size: 20,
+                  weight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: getSize(context).height * .09,
+              ),
+              
+              Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: [
+                     AppText("Deadline Date",color: AppColors.getGreenColor,),
+                    SizedBox(
+                      height: getSize(context).height * .02,
+                    ),
+                    AppText(todo.deadlineAt.toString().substring(0, 16)),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: getSize(context).height * .05,
+              ),
+              Center(
+                child: AppText(
+                  "Todo State",
+                  color: AppColors.getGreenColor,
+                  size: 20,
+                ),
+              ),
+              SizedBox(
+                height: getSize(context).height * .03,
+              ),
+              todo.beginedAt == null &&
+                      DateTime.now().millisecondsSinceEpoch <
+                          todo.deadlineAt!.millisecondsSinceEpoch
+                  ? Center(
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          print(todo.user);
+                          print(todo);
+                          Map<String, String> map = {
+                            "begined_at": DateTime.now().toString().substring(0, 19)
+                          };
+                          await TodoService.patch(todo.id, map).then((value) {
+                            setState(() {
+                              isLoading = false;
+                              todo = value;
+                            });
+                          });
+                        },
+                        child: const AppText("Démarer la tâche")),
+                  )
+                  : todo.finishedAt != null
+                      ? const AppText("Tâche accompli")
+                      : todo.beginedAt != null && todo.deadlineAt == null
+                          ? ElevatedButton(
+                              onPressed: () async {
                                 setState(() {
-                                  isLoading = false;
-                                  todo = value;
+                                  isLoading = true;
                                 });
-                              });
-                            },
-                            child: isLoading
-                                ? CircularProgressIndicator(
-                                    color: AppColors.getWhiteColor,
-                                  )
-                                : const AppText("Finir la tâche"))
-                        : todo.finishedAt == null &&
-                                DateTime.now().millisecondsSinceEpoch >
-                                    todo.deadlineAt!.millisecondsSinceEpoch
-                            ? const AppText("Tâche non accompli")
-                            : Container(),
-          ],
+                                Map<String, String> map = {
+                                  "finished_at":
+                                      DateTime.now().toString().substring(0, 19)
+                                };
+                                await TodoService.patch(todo.id, map)
+                                    .then((value) {
+                                  setState(() {
+                                    isLoading = false;
+                                    todo = value;
+                                  });
+                                });
+                              },
+                              child: isLoading
+                                  ? CircularProgressIndicator(
+                                      color: AppColors.getWhiteColor,
+                                    )
+                                  : const AppText("Finir la tâche"))
+                          : todo.finishedAt == null &&
+                                  DateTime.now().millisecondsSinceEpoch >
+                                      todo.deadlineAt!.millisecondsSinceEpoch
+                              ? const AppText("Tâche non accompli")
+                              : Container(),
+            ],
+          ),
         ),
       ),
     );
