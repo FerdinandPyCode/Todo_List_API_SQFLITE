@@ -32,7 +32,6 @@ class Todo {
         finishedAt: DateTime.now(),
         deadlineAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        
       );
 
   Todo copyWith({
@@ -103,60 +102,37 @@ class Todo {
       id: map['id'] is int ? map['id'].toString() : map['id'],
       description: map['description'],
       title: map['title'],
-      beginedAt: map['begined_at'] != null
-          ? DateTime.parse(map['begined_at'])
-          : null,
+      beginedAt:
+          map['begined_at'] != null ? DateTime.parse(map['begined_at']) : null,
       finishedAt: map['finished_at'] != null
           ? DateTime.parse(map['finished_at'])
           : null,
       deadlineAt: map['deadline_at'] != null
           ? DateTime.parse(map['deadline_at'])
           : null,
-      updatedAt: map['updated_at'] != null
-          ? DateTime.parse(map['updated_at'])
-          : null,
-      createAt: map['created_at'] != null
-          ? DateTime.parse(map['created_at'])
-          : null,
+      updatedAt:
+          map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
+      createAt:
+          map['created_at'] != null ? DateTime.parse(map['created_at']) : null,
       priority: map['priority'],
       user: map['user_id'] ?? "",
     );
   }
 
-  /*
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        idSecond TEXT,
-        title TEXT NOT NULL,
-        description TEXT NOT NULL,
-        beginAt  TEXT ,
-        finishAt  TEXT ,
-       deadlineAt  TEXT NOT NULL,
-        updateAt  TEXT NOT NULL,
-        createAt  TEXT NOT NULL,
-        priority  TEXT NOT NULL,
-        user  TEXT NOT NULL
-  */
-
-    factory Todo.fromMap2(Map<String, dynamic> map) {
+  factory Todo.fromMap2(Map<String, dynamic> map) {
     return Todo(
       id: map['id'] is int ? map['id'].toString() : map['id'],
       description: map['description'],
       title: map['title'],
-      beginedAt: map['beginAt'] != null
-          ? DateTime.parse(map['beginAt'])
-          : null,
-      finishedAt: map['finishAt'] != null
-          ? DateTime.parse(map['finishAt'])
-          : null,
-      deadlineAt: map['deadlineAt'] != null
-          ? DateTime.parse(map['deadlineAt'])
-          : null,
-      updatedAt: map['updateAt'] != null
-          ? DateTime.parse(map['updateAt'])
-          : null,
-      createAt: map['createAt'] != null
-          ? DateTime.parse(map['createAt'])
-          : null,
+      beginedAt: map['beginAt'] != null ? DateTime.parse(map['beginAt']) : null,
+      finishedAt:
+          map['finishAt'] != null ? DateTime.parse(map['finishAt']) : null,
+      deadlineAt:
+          map['deadlineAt'] != null ? DateTime.parse(map['deadlineAt']) : null,
+      updatedAt:
+          map['updateAt'] != null ? DateTime.parse(map['updateAt']) : null,
+      createAt:
+          map['createAt'] != null ? DateTime.parse(map['createAt']) : null,
       priority: map['priority'],
       user: map['user'] ?? "",
     );
@@ -202,16 +178,3 @@ class Todo {
         user.hashCode;
   }
 }
-
-// {
-//   "id": "34bc23f5-c22a-462b-a32e-1f3b517e6bf3",
-//   "description": "Gazo et Tiako en concert! je ne dois pas rater",
-//   "title": "Aller au concert",
-//   "begined_at": null,
-//   "finished_at": null,
-//   "deadline_at": "2022-12-27 12:00:00",
-//   "priority": "medium",
-//   "user_id": "73b49f16-dbb6-418e-8450-a7ac5cb750de",
-//   "created_at": "2022-12-09 14:29:46",
-//   "updated_at": "2022-12-09 14:29:46"
-// }
