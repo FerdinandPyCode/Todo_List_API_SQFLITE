@@ -37,6 +37,7 @@ class _TodoDetailState extends State<TodoDetail> {
           ),
         ),
         body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -63,7 +64,7 @@ class _TodoDetailState extends State<TodoDetail> {
                 child: AppText(
                   todo.title!,
                   size: 20,
-                  weight: FontWeight.bold,
+                  //weight: FontWeight.bold,
                 ),
               ),
               SizedBox(
@@ -88,7 +89,7 @@ class _TodoDetailState extends State<TodoDetail> {
                 child: AppText(
                   todo.description!,
                   size: 20,
-                  weight: FontWeight.bold,
+                  //weight: FontWeight.bold,
                 ),
               ),
               SizedBox(
@@ -101,6 +102,7 @@ class _TodoDetailState extends State<TodoDetail> {
                     AppText(
                       "Deadline Date",
                       color: AppColors.getGreenColor,
+                      weight: FontWeight.bold,
                     ),
                     SizedBox(
                       height: getSize(context).height * .02,
@@ -117,6 +119,7 @@ class _TodoDetailState extends State<TodoDetail> {
                   "Todo State",
                   color: AppColors.getGreenColor,
                   size: 20,
+                  weight: FontWeight.bold,
                 ),
               ),
               SizedBox(
@@ -150,11 +153,17 @@ class _TodoDetailState extends State<TodoDetail> {
                               });
                             });
                           },
-                          child: const AppText("Démarer la tâche")),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: AppText("Démarer la tâche"),
+                          )),
                     )
                   : todo.finishedAt != null
-                      ? const AppText("Tâche accompli")
-                      : todo.beginedAt != null && todo.deadlineAt == null
+                      ? const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: AppText("Tâche accompli"),
+                        )
+                      : todo.beginedAt != null && todo.finishedAt == null
                           ? ElevatedButton(
                               onPressed: () async {
                                 setState(() {
@@ -181,12 +190,18 @@ class _TodoDetailState extends State<TodoDetail> {
                                   ? CircularProgressIndicator(
                                       color: AppColors.getWhiteColor,
                                     )
-                                  : const AppText("Finir la tâche"))
+                                  : const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: AppText("Finir la tâche"),
+                                    ))
                           : todo.finishedAt == null &&
                                   DateTime.now().millisecondsSinceEpoch >
                                       todo.deadlineAt!.millisecondsSinceEpoch
-                              ? const AppText("Tâche non accompli")
-                              : const AppText("Tâche en cours"),
+                              ? const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: AppText("Tâche non accompli"),
+                                )
+                              : const AppText(""),
             ],
           ),
         ),

@@ -67,9 +67,25 @@ class _ListeTodoState extends ConsumerState<ListeTodo> {
                           -Bleue:La tâche est en cours  
                           -Rouge:Délai expiré 
                           -Bleu pas encore demarré
+                          -Vert: fini
                          */
                       trailing: AppText(
-                        "Starting",
+                        todo.beginedAt == null &&
+                                DateTime.now().millisecondsSinceEpoch <
+                                    todo.deadlineAt!.millisecondsSinceEpoch
+                            ? "En attente"
+                            : todo.finishedAt != null
+                                ? "Fini"
+                                : todo.beginedAt != null &&
+                                        todo.finishedAt == null
+                                    ? "En cours"
+                                    : todo.finishedAt == null &&
+                                            DateTime.now()
+                                                    .millisecondsSinceEpoch >
+                                                todo.deadlineAt!
+                                                    .millisecondsSinceEpoch
+                                        ? "Expiré"
+                                        : "",
                         color: AppColors.getGreenColor,
                         size: 13.0,
                         isNormal: false,
