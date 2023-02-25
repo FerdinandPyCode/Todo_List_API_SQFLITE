@@ -6,8 +6,6 @@ import 'package:todo_app/utils/app_func.dart';
 import 'package:todo_app/utils/app_text.dart';
 import 'package:todo_app/utils/colors.dart';
 
-import '../data/services/sql_database.dart';
-
 class ListeTodo extends StatefulWidget {
   const ListeTodo({super.key});
 
