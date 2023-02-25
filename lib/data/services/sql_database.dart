@@ -5,13 +5,6 @@ import 'package:todo_app/utils/constants.dart';
 import '../models/todo.dart';
 
 class TodoDataBase {
-  static final List<Todo> allTodo = [];
-
-  static Future<List<Todo>> get todo async {
-    getAllTodo();
-    return allTodo;
-  }
-
 //Fonction d'initialisation de la base de donnée
   static Future<sql.Database> _initDB() async {
     return await sql.openDatabase('contact.db', version: 2,
@@ -65,7 +58,7 @@ class TodoDataBase {
 //Get all Todo
   static Future<List<Todo>> getAllTodo() async {
     final prefs = await SharedPreferences.getInstance();
-
+    List<Todo> allTodo = [];
     try {
       sql.Database db = await TodoDataBase._initDB();
 
@@ -93,8 +86,8 @@ class TodoDataBase {
   static Future<Todo> getOneTodo(String id) async {
     try {
       sql.Database db = await TodoDataBase._initDB();
-      final maps = await db.query('todo',
-          where: "user = ?", whereArgs: [id], limit: 1);
+      final maps =
+          await db.query('todo', where: "user = ?", whereArgs: [id], limit: 1);
       await TodoDataBase.close();
       return Todo.fromMap(maps.first);
     } catch (e) {

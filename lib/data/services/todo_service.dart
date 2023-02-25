@@ -34,8 +34,6 @@ class TodoService {
     data1['idSecond'] = newTodo.id ?? "";
     data1["createAt"] = DateTime.now().toString().substring(0, 19);
     data1["updateAt"] = DateTime.now().toString().substring(0, 19);
-    data1["createAt"] = "";
-    data1["finishAt"] = "";
     data1["title"] = data["title"];
     data1["description"] = data["description"];
     data1["priority"] = data["priority"];

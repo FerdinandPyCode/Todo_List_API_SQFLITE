@@ -86,7 +86,22 @@ class _ListeTodoState extends ConsumerState<ListeTodo> {
                                                     .millisecondsSinceEpoch
                                         ? "Expiré"
                                         : "",
-                        color: AppColors.getGreenColor,
+                        color: todo.beginedAt == null &&
+                                DateTime.now().millisecondsSinceEpoch <
+                                    todo.deadlineAt!.millisecondsSinceEpoch
+                            ? AppColors.getBlackColors
+                            : todo.finishedAt != null
+                                ? AppColors.getGreenColor
+                                : todo.beginedAt != null &&
+                                        todo.finishedAt == null
+                                    ? AppColors.getblueColor
+                                    : todo.finishedAt == null &&
+                                            DateTime.now()
+                                                    .millisecondsSinceEpoch >
+                                                todo.deadlineAt!
+                                                    .millisecondsSinceEpoch
+                                        ? AppColors.getRedColor
+                                        : AppColors.getblueColor,
                         size: 13.0,
                         isNormal: false,
                       ),
