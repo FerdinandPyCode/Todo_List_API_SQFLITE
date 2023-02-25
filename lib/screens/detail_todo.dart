@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/data/services/todo_service.dart';
 import 'package:todo_app/utils/app_func.dart';
@@ -18,13 +19,17 @@ class TodoDetail extends StatefulWidget {
 class _TodoDetailState extends State<TodoDetail> {
   Todo todo = Todo.initial();
   TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionCOntroller = TextEditingController();
 
   bool isLoading = false;
+  bool isLoading2 = false;
 
   @override
   void initState() {
     todo = widget.todo;
     super.initState();
+    titleController.text = widget.todo.title!;
+    descriptionCOntroller.text = widget.todo.description!;
   }
 
   @override
@@ -48,6 +53,7 @@ class _TodoDetailState extends State<TodoDetail> {
               SizedBox(
                 height: getSize(context).height * .05,
               ),
+              //Title
               Container(
                 alignment: Alignment.center,
                 width: double.infinity,
@@ -64,15 +70,63 @@ class _TodoDetailState extends State<TodoDetail> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: AppText(
-                  todo.title!,
-                  size: 20,
-                  //weight: FontWeight.bold,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: AppText(
+                        titleController.text,
+                        color: AppColors.getBlackColors,
+                        size: 20,
+                        //weight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          if ((todo.beginedAt != null &&
+                                  todo.finishedAt == null) ||
+                              todo.beginedAt == null &&
+                                  DateTime.now().millisecondsSinceEpoch <
+                                      todo.deadlineAt!.millisecondsSinceEpoch) {
+                            _showDialog(context, controller: titleController,
+                                action: () async {
+                              setState(() {
+                                isLoading2 = true;
+                              });
+                              Map<String, String> map = {
+                                "title": titleController.text
+                              };
+
+                              await TodoService.patch(widget.todo.id, map,
+                                      dataLocal: map)
+                                  .then(
+                                (value) {
+                                  setState(() {
+                                    todo = value;
+                                  });
+                                },
+                              );
+
+                              setState(() {
+                                isLoading2 = false;
+                              });
+                            });
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Vous ne pouvez pas modifier la tâche");
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.getGreenColor,
+                        ))
+                  ],
                 ),
               ),
               SizedBox(
                 height: getSize(context).height * .09,
               ),
+
+              //Description
               Container(
                 alignment: Alignment.center,
                 width: double.infinity,
@@ -89,29 +143,58 @@ class _TodoDetailState extends State<TodoDetail> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: AppSimpleInput(
-                  hasSuffix: true,
-                  suffix: IconButton(
-                      onPressed: () {
-                        _showDialog(context,
-                            controller: titleController, action: () {});
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.getGreenColor,
-                      )),
-                  hintText: todo.description!,
-                  textEditingController: titleController,
-                  validator: (value) {
-                    if (value!.isNotEmpty) {}
-                    return null;
-                  },
-                ) /*AppText(
-                  todo.description!,
-                  size: 20,
-                  //weight: FontWeight.bold,
-                )*/
-                ,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: AppText(
+                        descriptionCOntroller.text,
+                        color: AppColors.getBlackColors,
+                        size: 20,
+                        //weight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          if ((todo.beginedAt != null &&
+                                  todo.finishedAt == null) ||
+                              todo.beginedAt == null &&
+                                  DateTime.now().millisecondsSinceEpoch <
+                                      todo.deadlineAt!.millisecondsSinceEpoch) {
+                            _showDialog(context,
+                                controller: descriptionCOntroller,
+                                action: () async {
+                              setState(() {
+                                isLoading2 = true;
+                              });
+                              Map<String, String> map = {
+                                "description": descriptionCOntroller.text
+                              };
+
+                              await TodoService.patch(todo.id, map,
+                                      dataLocal: map)
+                                  .then(
+                                (value) {
+                                  setState(() {
+                                    todo = value;
+                                  });
+                                },
+                              );
+
+                              setState(() {
+                                isLoading2 = false;
+                              });
+                            });
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Vous ne pouvez pas modifier la tâche");
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.getGreenColor,
+                        ))
+                  ],
+                ),
               ),
               SizedBox(
                 height: getSize(context).height * .09,
@@ -267,15 +350,18 @@ class _TodoDetailState extends State<TodoDetail> {
 
             //Save
             TextButton(
-                onPressed: () {
-                  action;
-                  Navigator.pop(context);
+                onPressed: () async {
+                  action();
+                  Future.delayed(const Duration(seconds: 2))
+                      .then((value) => Navigator.pop(context));
                 },
-                child: AppText(
-                  'Save',
-                  color: AppColors.getGreenColor,
-                  size: 14.0,
-                )),
+                child: isLoading2
+                    ? const CircularProgressIndicator()
+                    : AppText(
+                        'Save',
+                        color: AppColors.getGreenColor,
+                        size: 14.0,
+                      )),
           ],
         );
       },

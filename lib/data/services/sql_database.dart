@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+import 'package:todo_app/utils/app_func.dart';
 import 'package:todo_app/utils/constants.dart';
 /* We implemente on this file the differents functions to setup our database */
 import '../models/todo.dart';
@@ -44,13 +45,13 @@ class TodoDataBase {
   static Future<int> createTodo(Map<String, String> map) async {
     try {
       sql.Database db = await TodoDataBase._initDB();
-      print(map);
+      logd(map);
       final id = await db.insert('todo', map);
-      print("L'identifiant du Todo crée est $id");
+      logd("L'identifiant du Todo crée est $id");
       await TodoDataBase.close();
       return id;
     } catch (e) {
-      print(e);
+      logd(e);
       return -1;
     }
   }
@@ -71,27 +72,27 @@ class TodoDataBase {
         orderBy: "id",
       );
       for (int i = 0; i < resultat.length; i++) {
-        print(resultat[i]);
+        logd(resultat[i]);
         allTodo.add(Todo.fromMap2(resultat[i]));
       }
       await TodoDataBase.close();
       return allTodo;
     } catch (e) {
-      print("ereruhzbkzbhknb kn $e");
+      logd("ereruhzbkzbhknb kn $e");
       return [];
     }
   }
 
 //Get Todo by id
-  static Future<Todo> getOneTodo(String id) async {
+  static Future<Todo> getOneTodo(int id) async {
     try {
       sql.Database db = await TodoDataBase._initDB();
       final maps =
-          await db.query('todo', where: "user = ?", whereArgs: [id], limit: 1);
+          await db.query('todo', where: "id = ?", whereArgs: [id], limit: 1);
       await TodoDataBase.close();
       return Todo.fromMap(maps.first);
     } catch (e) {
-      print(e);
+      logd(e);
       rethrow;
     }
   }
@@ -105,7 +106,7 @@ class TodoDataBase {
       await TodoDataBase.close();
       return result;
     } catch (e) {
-      print(e);
+      logd(e);
       return -1;
     }
   }
@@ -115,11 +116,11 @@ class TodoDataBase {
     try {
       final db = await TodoDataBase._initDB();
       await db.delete('todo', where: "idSecond = ?", whereArgs: [id]);
-      print("L'identifiant du Todo suprimé est $id ");
+      logd("L'identifiant du Todo suprimé est $id ");
       await TodoDataBase.close();
       return id;
     } catch (e) {
-      print(e);
+      logd(e);
       return "null";
     }
   }
