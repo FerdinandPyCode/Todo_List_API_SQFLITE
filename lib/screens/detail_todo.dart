@@ -79,7 +79,7 @@ class _TodoDetailState extends State<TodoDetail> {
             SizedBox(
               height: getSize(context).height * .03,
             ),
-            todo.beginedAt == null &&
+            (todo.beginedAt == null || todo.beginedAt == '') &&
                     DateTime.now().millisecondsSinceEpoch <
                         todo.deadlineAt!.millisecondsSinceEpoch
                 ? ElevatedButton(
@@ -87,12 +87,18 @@ class _TodoDetailState extends State<TodoDetail> {
                       setState(() {
                         isLoading = true;
                       });
-                      print(todo.user);
-                      print(todo);
+                      logd(todo.user);
+                      logd(todo);
+
                       Map<String, String> map = {
                         "begined_at": DateTime.now().toString().substring(0, 19)
                       };
-                      await TodoService.patch(todo.id, map).then((value) {
+
+                      Map<String, String> map2 = {
+                        "beginedAt": DateTime.now().toString().substring(0, 19)
+                      };
+                      await TodoService.patch(todo.id, map, dataLocal: map2)
+                          .then((value) {
                         setState(() {
                           isLoading = false;
                           todo = value;
@@ -100,9 +106,10 @@ class _TodoDetailState extends State<TodoDetail> {
                       });
                     },
                     child: const AppText("Démarer la tâche"))
-                : todo.finishedAt != null
-                    ? const AppText("Tâche accompli")
-                    : todo.beginedAt != null && todo.deadlineAt == null
+                : (todo.finishedAt != null || todo.finishedAt != '')
+                    ? const AppText("Tâche accompli ")
+                    : (todo.beginedAt != null || todo.beginedAt != '') &&
+                            (todo.deadlineAt == null || todo.deadlineAt == '')
                         ? ElevatedButton(
                             onPressed: () async {
                               setState(() {
@@ -112,7 +119,12 @@ class _TodoDetailState extends State<TodoDetail> {
                                 "finished_at":
                                     DateTime.now().toString().substring(0, 19)
                               };
-                              await TodoService.patch(todo.id, map)
+                              Map<String, String> map2 = {
+                                "finishedAt":
+                                    DateTime.now().toString().substring(0, 19)
+                              };
+                              await TodoService.patch(todo.id, map,
+                                      dataLocal: map2)
                                   .then((value) {
                                 setState(() {
                                   isLoading = false;

@@ -14,33 +14,35 @@ class TodoService {
         data: data,
         options: Options(headers: {"authorization": "Bearer $token"}));
 
-        // Appel à la fonction d'enregistrement de la tâche dans la base de donnée sql
-        final String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
-        Map<String,String>data1={};
-        data1["user"]=userId;
-        data1["createAt"]=DateTime.now().toString()..substring(0,16);
-        data1["updateAt"]=DateTime.now().toString()..substring(0,16);
-        data1["createAt"]=""; 
-        data1["finishAt"]="";
-        data1["title"]=data["title"]; 
-        data1["description"]=data["description"]; 
-        data1["priority"]=data["priority"];
-        data1["deadlineAt"]=data["deadline_at"];
+    Todo newTodo = Todo.fromMap(response.data);
 
-        TodoDataBase.createTodo(data1).then((value) {
-          if (value!=-1){
-            print("La tache a été enregistré dans la base de donnné avec l'identifiant $value");
-          }else{
-            print("Erreur d'enregistrement ");
-          }
-          
-        });
+    // Appel à la fonction d'enregistrement de la tâche dans la base de donnée sql
+    final String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
+    Map<String, String> data1 = {};
+    data1["user"] = userId;
+    data1['idSecond'] = newTodo.id ?? "";
+    data1["createAt"] = DateTime.now().toString().substring(0, 19);
+    data1["updateAt"] = DateTime.now().toString().substring(0, 19);
+    data1["createAt"] = "";
+    data1["finishAt"] = "";
+    data1["title"] = data["title"];
+    data1["description"] = data["description"];
+    data1["priority"] = data["priority"];
+    data1["deadlineAt"] = data["deadline_at"];
+
+    TodoDataBase.createTodo(data1).then((value) {
+      if (value != -1) {
+        print(
+            "La tache a été enregistré dans la base de donnné avec l'identifiant $value");
+      } else {
+        print("Erreur d'enregistrement ");
+      }
+    });
     if (kDebugMode) {
       print(response.data);
     }
     return Todo.fromMap(response.data);
   }
-
 
   static Future<List<Todo>> fetch({queryParameters}) async {
     final prefs = await SharedPreferences.getInstance();
@@ -70,35 +72,35 @@ class TodoService {
     return Todo.fromJson(response.data);
   }
 
-  static Future<Todo> patch(id, data) async {
+  static Future<Todo> patch(id, data, {Map<String,String>? dataLocal}) async {
+
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
-    if (kDebugMode) {
-      //Mise à jour dans la base de donnée
-      final String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
-        Map<String,String>data1={};
-        data1["user"]=userId;
-        data1["createAt"]=DateTime.now().toString()..substring(0,16);
-        data1["updateAt"]=DateTime.now().toString()..substring(0,16);
-        data1["createAt"]=""; 
-        data1["finishAt"]="";
-        data1["title"]=data["title"]; 
-        data1["description"]=data["description"]; 
-        data1["priority"]=data["priority"];
-        data1["deadlineAt"]=data["deadline_at"];
-      TodoDataBase.updateTodo(data1,userId).then((value){
-        if(value!=0){
-          print("Todo mise à jour ");
-        }else{
-          print("Todo non mise à jour ");
-        }
-      });
-      print('------------------------->');
-      print(data);
-      print('------------------------->');
 
-      print('${Constant.BASE_URL}todos/$id');
-    }
+    //Mise à jour dans la base de donnée
+    final String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
+    Map<String, String> data1 = {};
+
+    data1["user"] = userId;
+    data1["createAt"] = data[''];
+    data1["updateAt"] = DateTime.now().toString().substring(0, 19);
+    data1["title"] = data["title"];
+    data1["description"] = data["description"];
+    data1["priority"] = data["priority"];
+    data1["deadlineAt"] = data["deadline_at"];
+
+    TodoDataBase.updateTodo(data1, userId).then((value) {
+      if (value != 0) {
+        print("Todo mise à jour ");
+      } else {
+        print("Todo non mise à jour ");
+      }
+    });
+    print('------------------------->');
+    print(data);
+    print('------------------------->');
+
+    print('${Constant.BASE_URL}todos/$id');
 
     var response = await Dio().patch('${Constant.BASE_URL}todos/$id',
         data: data,
@@ -115,14 +117,15 @@ class TodoService {
 
     var response = await Dio().delete('${Constant.BASE_URL}todos/$id',
         options: Options(headers: {"authorization": "Bearer $token"}));
-        // Supression du Todo dans la base donnée 
-        TodoDataBase.deleteTodo(id).then((value) {
-          if(value!=0){
-            print('Reussi');
-          }{
-            print("rejeté");
-          }
-        });
+    // Supression du Todo dans la base donnée
+    TodoDataBase.deleteTodo(id).then((value) {
+      if (value != 0) {
+        print('Reussi');
+      }
+      {
+        print("rejeté");
+      }
+    });
     return Todo.fromJson(response.data);
   }
 }
