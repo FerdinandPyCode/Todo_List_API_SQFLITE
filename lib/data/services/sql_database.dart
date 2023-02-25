@@ -15,7 +15,7 @@ class TodoDataBase {
 //Fonction d'initialisation de la base de donnée
     static Future <sql.Database> _initDB() async {
       
-      return await sql.openDatabase('contact.db', version: 1,
+      return await sql.openDatabase('contact.db', version: 2,
           onCreate: (sql.Database database, int version) async {
         await _createDB(database);
       });
@@ -36,8 +36,8 @@ class TodoDataBase {
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT NOT NULL,
         description TEXT NOT NULL,
-        beginAt  TEXT NOT NULL,
-        finishAt  TEXT NOT NULL,
+        beginAt  TEXT ,
+        finishAt  TEXT ,
        deadlineAt  TEXT NOT NULL,
         updateAt  TEXT NOT NULL,
         createAt  TEXT NOT NULL,
@@ -94,11 +94,11 @@ class TodoDataBase {
 
   //------------------------------------------------------The methode for Todo/Todo CRUD---------------------------------------------------------
   //Create Todo
-  static Future <int> createTodo(Todo todo) async {
+  static Future <int> createTodo(Map<String,String>map) async {
       try{
       sql.Database db = await TodoDataBase._initDB();
-      print(todo.toMap());
-      final id = await db.insert('todo', todo.toMap());
+      print(map);
+      final id = await db.insert('todo', map);
       print("L'identifiant du Todo crée est $id");
       await TodoDataBase.close();
       return id;
@@ -110,7 +110,7 @@ class TodoDataBase {
 
 
 //Get all Todo
-    static  Future<List<Map<String, dynamic>>> getAllTodo() async {
+static Future <List<Todo>> getAllTodo() async {
     try{
       sql.Database db = await TodoDataBase._initDB();
       final resultat=await db.query('todo', orderBy: "id",);
@@ -119,7 +119,7 @@ class TodoDataBase {
         allTodo.add(Todo.fromMap(resultat[i]));
       }
       await TodoDataBase.close();
-      return resultat;
+      return allTodo;
     }catch (e){
         print("ereruhzbkzbhknb kn $e");
       return [];
@@ -144,11 +144,11 @@ class TodoDataBase {
 
 
 //Update toto
-  static Future <int> updateTodo(Todo data) async{
+  static Future <int> updateTodo(Map<String,String>map,String id) async{
 
     try{
-      sql.Database db =await  TodoDataBase._initDB();
-    final result=db.update('todo', data.toMap(),where: "id = ?",whereArgs: [data.id]);
+    sql.Database db =await  TodoDataBase._initDB();
+    final result=db.update('todo', map,where: "id = ?",whereArgs:[id] );
     await TodoDataBase.close();
     return result;
     }catch (e){

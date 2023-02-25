@@ -5,6 +5,8 @@ import 'package:todo_app/screens/detail_todo.dart';
 import 'package:todo_app/utils/app_func.dart';
 import 'package:todo_app/utils/app_text.dart';
 
+import '../data/services/sql_database.dart';
+
 class ListeTodo extends StatefulWidget {
   const ListeTodo({super.key});
 
@@ -32,7 +34,7 @@ class _ListeTodoState extends State<ListeTodo> {
       ),
       body: SafeArea(
         child: FutureBuilder(
-          future: TodoService.fetch(),
+          future:  TodoDataBase.getAllTodo(),//TodoService.fetch(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(

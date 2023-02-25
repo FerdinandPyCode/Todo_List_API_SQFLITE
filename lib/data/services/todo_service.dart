@@ -15,8 +15,20 @@ class TodoService {
         options: Options(headers: {"authorization": "Bearer $token"}));
 
         // Appel à la fonction d'enregistrement de la tâche dans la base de donnée sql
-        TodoDataBase.createTodo(data).then((value) {
-          if (value!=0){
+        final String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
+        Map<String,String>data1={};
+        data1["user"]=userId;
+        data1["createAt"]=DateTime.now().toString()..substring(0,16);
+        data1["updateAt"]=DateTime.now().toString()..substring(0,16);
+        data1["createAt"]=""; 
+        data1["finishAt"]="";
+        data1["title"]=data["title"]; 
+        data1["description"]=data["description"]; 
+        data1["priority"]=data["priority"];
+        data1["deadlineAt"]=data["deadline_at"];
+
+        TodoDataBase.createTodo(data1).then((value) {
+          if (value!=-1){
             print("La tache a été enregistré dans la base de donnné avec l'identifiant $value");
           }else{
             print("Erreur d'enregistrement ");
@@ -63,7 +75,18 @@ class TodoService {
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
     if (kDebugMode) {
       //Mise à jour dans la base de donnée
-      TodoDataBase.updateTodo(id).then((value){
+      final String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
+        Map<String,String>data1={};
+        data1["user"]=userId;
+        data1["createAt"]=DateTime.now().toString()..substring(0,16);
+        data1["updateAt"]=DateTime.now().toString()..substring(0,16);
+        data1["createAt"]=""; 
+        data1["finishAt"]="";
+        data1["title"]=data["title"]; 
+        data1["description"]=data["description"]; 
+        data1["priority"]=data["priority"];
+        data1["deadlineAt"]=data["deadline_at"];
+      TodoDataBase.updateTodo(data1,userId).then((value){
         if(value!=0){
           print("Todo mise à jour ");
         }else{

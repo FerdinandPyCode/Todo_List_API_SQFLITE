@@ -74,19 +74,19 @@ class Todo {
       result.addAll({'title': title});
     }
     if (beginedAt != null) {
-      result.addAll({'beginedAt': beginedAt!.millisecondsSinceEpoch});
+      result.addAll({'beginedAt': beginedAt!.toString()..substring(0, 16)});
     }
     if (finishedAt != null) {
-      result.addAll({'finishedAt': finishedAt!.millisecondsSinceEpoch});
+      result.addAll({'finishedAt': finishedAt!.toString()..substring(0, 16)});
     }
     if (deadlineAt != null) {
-      result.addAll({'deadlineAt': deadlineAt!.millisecondsSinceEpoch});
+      result.addAll({'deadlineAt': deadlineAt!.toString()..substring(0, 16)});
     }
     if (updatedAt != null) {
-      result.addAll({'updatedAt': updatedAt!.millisecondsSinceEpoch});
+      result.addAll({'updatedAt': updatedAt!.toString()..substring(0, 16)});
     }
     if (createAt != null) {
-      result.addAll({'createAt': createAt!.millisecondsSinceEpoch});
+      result.addAll({'createAt': createAt!.toString()..substring(0, 16)});
     }
     if (priority != null) {
       result.addAll({'priority': priority});
@@ -100,7 +100,7 @@ class Todo {
 
   factory Todo.fromMap(Map<String, dynamic> map) {
     return Todo(
-      id: map['id'],
+      id: map['id'] is int ? map['id'].toString() : map['id'],
       description: map['description'],
       title: map['title'],
       beginedAt: map['begined_at'] != null
