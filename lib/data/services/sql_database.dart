@@ -1,4 +1,6 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+import 'package:todo_app/utils/constants.dart';
 /* We implemente on this file the differents functions to setup our database */
 import '../models/todo.dart';
 
@@ -62,10 +64,17 @@ class TodoDataBase {
 
 //Get all Todo
   static Future<List<Todo>> getAllTodo() async {
+    final prefs = await SharedPreferences.getInstance();
+
     try {
       sql.Database db = await TodoDataBase._initDB();
+
+      String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
+
       final resultat = await db.query(
         'todo',
+        where: "idSecond = ?",
+        whereArgs: [userId],
         orderBy: "id",
       );
       for (int i = 0; i < resultat.length; i++) {
@@ -81,11 +90,11 @@ class TodoDataBase {
   }
 
 //Get Todo by id
-  static Future<Todo> getOneTodo(int id) async {
+  static Future<Todo> getOneTodo(String id) async {
     try {
       sql.Database db = await TodoDataBase._initDB();
-      final maps =
-          await db.query('todo', where: "id = ?", whereArgs: [id], limit: 1);
+      final maps = await db.query('todo',
+          where: "idSecond = ?", whereArgs: [id], limit: 1);
       await TodoDataBase.close();
       return Todo.fromMap(maps.first);
     } catch (e) {
@@ -98,7 +107,8 @@ class TodoDataBase {
   static Future<int> updateTodo(Map<String, String> map, String id) async {
     try {
       sql.Database db = await TodoDataBase._initDB();
-      final result = db.update('todo', map, where: "id = ?", whereArgs: [id]);
+      final result =
+          db.update('todo', map, where: "idSecond = ?", whereArgs: [id]);
       await TodoDataBase.close();
       return result;
     } catch (e) {
@@ -108,20 +118,20 @@ class TodoDataBase {
   }
 
 //Delete Todo
-  static Future<int> deleteTodo(int id) async {
+  static Future<String> deleteTodo(String id) async {
     try {
       final db = await TodoDataBase._initDB();
-      await db.delete('todo', where: "id = ?", whereArgs: [id]);
+      await db.delete('todo', where: "idSecond = ?", whereArgs: [id]);
       print("L'identifiant du Todo suprimé est $id ");
       await TodoDataBase.close();
       return id;
     } catch (e) {
       print(e);
-      return -1;
+      return "null";
     }
   }
 
-// Serach todo
+// Serch todo
   static Future<bool> researchTodo(String name) async {
     return true;
   }

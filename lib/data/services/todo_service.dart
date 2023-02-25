@@ -79,17 +79,8 @@ class TodoService {
 
     //Mise à jour dans la base de donnée
     final String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
-    Map<String, String> data1 = {};
 
-    data1["user"] = userId;
-    data1["createAt"] = data[''];
-    data1["updateAt"] = DateTime.now().toString().substring(0, 19);
-    data1["title"] = data["title"];
-    data1["description"] = data["description"];
-    data1["priority"] = data["priority"];
-    data1["deadlineAt"] = data["deadline_at"];
-
-    TodoDataBase.updateTodo(data1, userId).then((value) {
+    TodoDataBase.updateTodo(dataLocal!, userId).then((value) {
       if (value != 0) {
         print("Todo mise à jour ");
       } else {
