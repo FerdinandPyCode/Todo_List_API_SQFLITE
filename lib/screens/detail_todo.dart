@@ -5,6 +5,8 @@ import 'package:todo_app/utils/app_func.dart';
 import 'package:todo_app/utils/app_text.dart';
 import 'package:todo_app/utils/colors.dart';
 
+import '../utils/app_simple_input.dart';
+
 class TodoDetail extends StatefulWidget {
   final Todo todo;
   const TodoDetail({required this.todo, super.key});
@@ -15,6 +17,7 @@ class TodoDetail extends StatefulWidget {
 
 class _TodoDetailState extends State<TodoDetail> {
   Todo todo = Todo.initial();
+  TextEditingController titleController = TextEditingController();
 
   bool isLoading = false;
 
@@ -86,11 +89,29 @@ class _TodoDetailState extends State<TodoDetail> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: AppText(
+                child: AppSimpleInput(
+                  hasSuffix: true,
+                  suffix: IconButton(
+                      onPressed: () {
+                        _showDialog(context,
+                            controller: titleController, action: () {});
+                      },
+                      icon: Icon(
+                        Icons.edit,
+                        color: AppColors.getGreenColor,
+                      )),
+                  hintText: todo.description!,
+                  textEditingController: titleController,
+                  validator: (value) {
+                    if (value!.isNotEmpty) {}
+                    return null;
+                  },
+                ) /*AppText(
                   todo.description!,
                   size: 20,
                   //weight: FontWeight.bold,
-                ),
+                )*/
+                ,
               ),
               SizedBox(
                 height: getSize(context).height * .09,
@@ -206,6 +227,58 @@ class _TodoDetailState extends State<TodoDetail> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showDialog(BuildContext context,
+      {String title = '',
+      required TextEditingController controller,
+      required VoidCallback action,
+      String hintText = ''}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: AppText(
+            title,
+            color: AppColors.getBlackColors,
+            weight: FontWeight.bold,
+            size: 25.0,
+          ),
+          content: AppSimpleInput(
+            hasSuffix: false,
+            hintText: hintText,
+            textEditingController: controller,
+            validator: (value) {
+              return null;
+            },
+          ),
+          actions: <Widget>[
+            //Cancel
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: AppText(
+                  'Cancel',
+                  color: AppColors.getBlueNightColor,
+                  size: 14.0,
+                )),
+
+            //Save
+            TextButton(
+                onPressed: () {
+                  action;
+                  Navigator.pop(context);
+                },
+                child: AppText(
+                  'Save',
+                  color: AppColors.getGreenColor,
+                  size: 14.0,
+                )),
+          ],
+        );
+      },
     );
   }
 }

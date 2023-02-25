@@ -129,8 +129,8 @@ class TodoService {
     //Mise à jour dans la base de donnée
     final String userId = prefs.getString(Constant.USER_ID_PREF_KEY) ?? '';
 
-    TodoDataBase.updateTodo(dataLocal!, userId).then((value) {
-      if (value != 0) {
+    TodoDataBase.updateTodo(dataLocal!, id).then((value) {
+      if (value != -1) {
         print("Todo mise à jour ");
       } else {
         print("Todo non mise à jour ");

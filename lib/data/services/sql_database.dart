@@ -101,7 +101,7 @@ class TodoDataBase {
     try {
       sql.Database db = await TodoDataBase._initDB();
       final result =
-          db.update('todo', map, where: "isSecond = ?", whereArgs: [id]);
+          db.update('todo', map, where: "idSecond = ?", whereArgs: [id]);
       await TodoDataBase.close();
       return result;
     } catch (e) {
@@ -114,7 +114,7 @@ class TodoDataBase {
   static Future<String> deleteTodo(String id) async {
     try {
       final db = await TodoDataBase._initDB();
-      await db.delete('todo', where: "isSecond = ?", whereArgs: [id]);
+      await db.delete('todo', where: "idSecond = ?", whereArgs: [id]);
       print("L'identifiant du Todo suprimé est $id ");
       await TodoDataBase.close();
       return id;
