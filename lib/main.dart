@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/screens/home_screen.dart';
 import 'package:todo_app/utils/constants.dart';
 import 'screens/login_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,8 @@ void main() async {
     }
   }
 
-  runApp(MyApp(firstPage: firstPage));
+
+  runApp( ProviderScope(child: MyApp(firstPage: firstPage)));
 }
 
 class MyApp extends StatelessWidget {

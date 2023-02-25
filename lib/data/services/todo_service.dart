@@ -2,13 +2,21 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+
 import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/data/services/sql_database.dart';
 import 'package:todo_app/utils/constants.dart';
 
 class TodoService {
+  Ref ref;
+
+  TodoService({
+    required this.ref,
+  });
+  
   static Future<Todo> create(data) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
@@ -48,6 +56,35 @@ class TodoService {
   }
 
   static Future<List<Todo>> fetch({queryParameters}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
+
+    List<Todo> liste = [];
+
+    try {
+      var response = await Dio().get('${Constant.BASE_URL}todos',
+          queryParameters: queryParameters,
+          options: Options(headers: {"authorization": "Bearer $token"}));
+      if (kDebugMode) {
+        print(response.data);
+      }
+
+      for (var elt in response.data) {
+        liste.add(Todo.fromMap(elt));
+      }
+      return liste;
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        print("################################################");
+        liste = await TodoDataBase.getAllTodo();
+      } else {
+        print(e.message);
+      }
+    }
+    return liste;
+  }
+
+    Future<List<Todo>> fetch2({queryParameters}) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString(Constant.TOKEN_PREF_KEY) ?? '';
 

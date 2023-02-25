@@ -49,11 +49,17 @@ class _TodoDetailState extends State<TodoDetail> {
                 width: double.infinity,
                 color: AppColors.getGreenColor2,
                 height: 50.0,
-                child: AppText("Todo Title",size: 25.0,weight: FontWeight.bold,),
+                child: const AppText(
+                  "Todo Title",
+                  size: 25.0,
+                  weight: FontWeight.bold,
+                ),
               ),
-              const SizedBox(height: 15.0,),
+              const SizedBox(
+                height: 15.0,
+              ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: AppText(
                   todo.title!,
                   size: 20,
@@ -62,16 +68,23 @@ class _TodoDetailState extends State<TodoDetail> {
               ),
               SizedBox(
                 height: getSize(context).height * .09,
-              ),Container(
+              ),
+              Container(
                 alignment: Alignment.center,
                 width: double.infinity,
                 color: AppColors.getGreenColor2,
                 height: 50.0,
-                child: AppText("Todo Description",size: 25.0,weight: FontWeight.bold,),
+                child: const AppText(
+                  "Todo Description",
+                  size: 25.0,
+                  weight: FontWeight.bold,
+                ),
               ),
-              const SizedBox(height: 15.0,),
+              const SizedBox(
+                height: 15.0,
+              ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: AppText(
                   todo.description!,
                   size: 20,
@@ -81,12 +94,14 @@ class _TodoDetailState extends State<TodoDetail> {
               SizedBox(
                 height: getSize(context).height * .09,
               ),
-              
               Align(
                 alignment: Alignment.topRight,
                 child: Column(
                   children: [
-                     AppText("Deadline Date",color: AppColors.getGreenColor,),
+                    AppText(
+                      "Deadline Date",
+                      color: AppColors.getGreenColor,
+                    ),
                     SizedBox(
                       height: getSize(context).height * .02,
                     ),
@@ -111,25 +126,32 @@ class _TodoDetailState extends State<TodoDetail> {
                       DateTime.now().millisecondsSinceEpoch <
                           todo.deadlineAt!.millisecondsSinceEpoch
                   ? Center(
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          print(todo.user);
-                          print(todo);
-                          Map<String, String> map = {
-                            "begined_at": DateTime.now().toString().substring(0, 19)
-                          };
-                          await TodoService.patch(todo.id, map).then((value) {
+                      child: ElevatedButton(
+                          onPressed: () async {
                             setState(() {
-                              isLoading = false;
-                              todo = value;
+                              isLoading = true;
                             });
-                          });
-                        },
-                        child: const AppText("Démarer la tâche")),
-                  )
+                            print(todo.user);
+                            print(todo);
+                            Map<String, String> map = {
+                              "begined_at":
+                                  DateTime.now().toString().substring(0, 19)
+                            };
+                            Map<String, String> map2 = {
+                              "beginAt":
+                                  DateTime.now().toString().substring(0, 19)
+                            };
+                            await TodoService.patch(todo.id, map,
+                                    dataLocal: map2)
+                                .then((value) {
+                              setState(() {
+                                isLoading = false;
+                                todo = value;
+                              });
+                            });
+                          },
+                          child: const AppText("Démarer la tâche")),
+                    )
                   : todo.finishedAt != null
                       ? const AppText("Tâche accompli")
                       : todo.beginedAt != null && todo.deadlineAt == null
@@ -142,7 +164,12 @@ class _TodoDetailState extends State<TodoDetail> {
                                   "finished_at":
                                       DateTime.now().toString().substring(0, 19)
                                 };
-                                await TodoService.patch(todo.id, map)
+                                Map<String, String> map2 = {
+                                  "finishAt":
+                                      DateTime.now().toString().substring(0, 19)
+                                };
+                                await TodoService.patch(todo.id, map,
+                                        dataLocal: map2)
                                     .then((value) {
                                   setState(() {
                                     isLoading = false;
@@ -159,7 +186,7 @@ class _TodoDetailState extends State<TodoDetail> {
                                   DateTime.now().millisecondsSinceEpoch >
                                       todo.deadlineAt!.millisecondsSinceEpoch
                               ? const AppText("Tâche non accompli")
-                              : Container(),
+                              : const AppText("Tâche en cours"),
             ],
           ),
         ),

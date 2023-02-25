@@ -1,24 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/data/models/todo.dart';
-import 'package:todo_app/data/services/todo_service.dart';
 import 'package:todo_app/screens/add_todo.dart';
 import 'package:todo_app/screens/liste_todo.dart';
 import 'package:todo_app/screens/login_screen.dart';
 import 'package:todo_app/utils/app_func.dart';
+import 'package:todo_app/utils/app_text.dart';
+import 'package:todo_app/utils/providers.dart';
 
-class HomeState extends StatefulWidget {
+class HomeState extends ConsumerStatefulWidget {
   const HomeState({super.key});
 
   @override
-  State<HomeState> createState() => _HomeState();
+  ConsumerState<HomeState> createState() => _HomeState();
 }
 
-class _HomeState extends State<HomeState> {
-  bool isLoadingPosts = false;
+class _HomeState extends ConsumerState<HomeState> {
+  bool isLoadingTodos = false;
   List<Todo> liste = [];
 
   Map<String, double> dataMap = {
@@ -48,9 +50,8 @@ class _HomeState extends State<HomeState> {
     const Color.fromRGBO(91, 253, 199, 1)
   ];
 
-  loadPost() async {
-    liste = await TodoService.fetch();
-
+  loadTodo(List<Todo> liste) {
+    print("looooooooooooooooooo");
     for (Todo t in liste) {
       if (t.beginedAt != null) {
         commencer += 1;
@@ -85,125 +86,136 @@ class _HomeState extends State<HomeState> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => loadPost());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            navigateToNextPage(context, const CreateStackScreem());
-          },
-          child: const Icon(Icons.add),
-        ),
-        appBar: AppBar(
-          title: const Text("Home"),
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.clear();
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          navigateToNextPage(context, const CreateStackScreem());
+        },
+        child: const Icon(Icons.add),
+      ),
+      appBar: AppBar(
+        title: const Text("Home"),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
 
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()));
-                },
-                icon: const Icon(Icons.logout))
-          ],
-        ),
-        body: RefreshIndicator(
-          onRefresh: () => loadPost(),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: Text(
-                    "${liste.length} Tâches crées",
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.green),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                PieChart(
-                  dataMap: dataMap,
-                  animationDuration: const Duration(milliseconds: 800),
-                  chartLegendSpacing: 32,
-                  chartRadius: MediaQuery.of(context).size.width / 3.2,
-                  colorList: gradientList,
-                  initialAngleInDegree: 0,
-                  chartType: ChartType.ring,
-                  ringStrokeWidth: 32,
-                  centerText: "TÂCHES",
-                  legendOptions: const LegendOptions(
-                    showLegendsInRow: false,
-                    legendPosition: LegendPosition.right,
-                    showLegends: true,
-                    // legendShape: _BoxShape.circle,
-                    legendTextStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
+              },
+              icon: const Icon(Icons.logout))
+        ],
+      ),
+      body: ref.watch(fetchAllTodo).when(
+            data: (data) {
+              commencer = 0;
+              enCours = 0;
+              fini = 0;
+              finiTot = 0;
+              finiRetard = 0;
+              loadTodo(data);
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  chartValuesOptions: const ChartValuesOptions(
-                    showChartValueBackground: true,
-                    showChartValues: true,
-                    showChartValuesInPercentage: false,
-                    showChartValuesOutside: false,
-                    decimalPlaces: 0,
-                  ),
-                  // gradientList: ---To add gradient colors---
-                  // emptyColorGradient: ---Empty Color gradient---
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                PieChart(
-                  dataMap: dMap,
-                  animationDuration: const Duration(milliseconds: 800),
-                  chartLegendSpacing: 32,
-                  chartRadius: MediaQuery.of(context).size.width / 3.2,
-                  colorList: colorList,
-                  initialAngleInDegree: 0,
-                  chartType: ChartType.ring,
-                  ringStrokeWidth: 32,
-                  centerText: "TÂCHES",
-                  legendOptions: const LegendOptions(
-                    showLegendsInRow: false,
-                    legendPosition: LegendPosition.right,
-                    showLegends: true,
-                    // legendShape: _BoxShape.circle,
-                    legendTextStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
+                    Center(
+                      child: Text(
+                        "${data.length} Tâches crées",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                            color: Colors.green),
+                      ),
                     ),
-                  ),
-                  chartValuesOptions: const ChartValuesOptions(
-                      showChartValueBackground: true,
-                      showChartValues: true,
-                      showChartValuesInPercentage: false,
-                      showChartValuesOutside: false,
-                      decimalPlaces: 0),
-                  // gradientList: ---To add gradient colors---
-                  // emptyColorGradient: ---Empty Color gradient---
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        navigateToNextPage(context, const ListeTodo());
-                      },
-                      child: const Text("Voir la liste")),
-                )
-              ]),
-        ));
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    PieChart(
+                      dataMap: dataMap,
+                      animationDuration: const Duration(milliseconds: 800),
+                      chartLegendSpacing: 32,
+                      chartRadius: MediaQuery.of(context).size.width / 3.2,
+                      colorList: gradientList,
+                      initialAngleInDegree: 0,
+                      chartType: ChartType.ring,
+                      ringStrokeWidth: 32,
+                      centerText: "TÂCHES",
+                      legendOptions: const LegendOptions(
+                        showLegendsInRow: false,
+                        legendPosition: LegendPosition.right,
+                        showLegends: true,
+                        // legendShape: _BoxShape.circle,
+                        legendTextStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      chartValuesOptions: const ChartValuesOptions(
+                        showChartValueBackground: true,
+                        showChartValues: true,
+                        showChartValuesInPercentage: false,
+                        showChartValuesOutside: false,
+                        decimalPlaces: 0,
+                      ),
+                      // gradientList: ---To add gradient colors---
+                      // emptyColorGradient: ---Empty Color gradient---
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    PieChart(
+                      dataMap: dMap,
+                      animationDuration: const Duration(milliseconds: 800),
+                      chartLegendSpacing: 32,
+                      chartRadius: MediaQuery.of(context).size.width / 3.2,
+                      colorList: colorList,
+                      initialAngleInDegree: 0,
+                      chartType: ChartType.ring,
+                      ringStrokeWidth: 32,
+                      centerText: "TÂCHES",
+                      legendOptions: const LegendOptions(
+                        showLegendsInRow: false,
+                        legendPosition: LegendPosition.right,
+                        showLegends: true,
+                        // legendShape: _BoxShape.circle,
+                        legendTextStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      chartValuesOptions: const ChartValuesOptions(
+                          showChartValueBackground: true,
+                          showChartValues: true,
+                          showChartValuesInPercentage: false,
+                          showChartValuesOutside: false,
+                          decimalPlaces: 0),
+                      // gradientList: ---To add gradient colors---
+                      // emptyColorGradient: ---Empty Color gradient---
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            ref.refresh(fetchAllTodo);
+                            navigateToNextPage(context, const ListeTodo());
+                          },
+                          child: const Text("Voir la liste")),
+                    )
+                  ]);
+            },
+            error: (error, stackTrace) {
+              return const Center(
+                child: AppText("Une erreur est survenue"),
+              );
+            },
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+    );
   }
 }

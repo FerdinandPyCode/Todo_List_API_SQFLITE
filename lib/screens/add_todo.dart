@@ -1,22 +1,23 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/data/services/todo_service.dart';
-
+import 'package:todo_app/utils/providers.dart';
 import '../utils/app_input.dart';
 import '../utils/app_text.dart';
 import '../utils/colors.dart';
 
 enum Level { Low, Medium, High }
 
-class CreateStackScreem extends StatefulWidget {
+class CreateStackScreem extends ConsumerStatefulWidget {
   const CreateStackScreem({super.key});
 
   @override
-  State<CreateStackScreem> createState() => _CreateStackScreemState();
+  ConsumerState<CreateStackScreem> createState() => _CreateStackScreemState();
 }
 
-class _CreateStackScreemState extends State<CreateStackScreem> {
+class _CreateStackScreemState extends ConsumerState<CreateStackScreem> {
   // variable permettant de stocker l'image de l'utilisateur
 
   TextEditingController tileController = TextEditingController();
@@ -231,6 +232,7 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
                           };
 
                           await TodoService.create(map);
+                          ref.refresh(fetchAllTodo);
                           setState(() {
                             isLoading = false;
                           });
@@ -238,8 +240,7 @@ class _CreateStackScreemState extends State<CreateStackScreem> {
                               msg: "Todo added sucessfully !",
                               toastLength: Toast.LENGTH_LONG,
                               backgroundColor: AppColors.getGreenColor,
-                              gravity: ToastGravity.TOP
-                          );
+                              gravity: ToastGravity.TOP);
                           descriptionController.clear();
                           tileController.clear();
                         }),
