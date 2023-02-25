@@ -123,6 +123,45 @@ class Todo {
     );
   }
 
+  /*
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        idSecond TEXT,
+        title TEXT NOT NULL,
+        description TEXT NOT NULL,
+        beginAt  TEXT ,
+        finishAt  TEXT ,
+       deadlineAt  TEXT NOT NULL,
+        updateAt  TEXT NOT NULL,
+        createAt  TEXT NOT NULL,
+        priority  TEXT NOT NULL,
+        user  TEXT NOT NULL
+  */
+
+    factory Todo.fromMap2(Map<String, dynamic> map) {
+    return Todo(
+      id: map['id'] is int ? map['id'].toString() : map['id'],
+      description: map['description'],
+      title: map['title'],
+      beginedAt: map['beginAt'] != null
+          ? DateTime.parse(map['beginAt'])
+          : null,
+      finishedAt: map['finishAt'] != null
+          ? DateTime.parse(map['finishAt'])
+          : null,
+      deadlineAt: map['deadlineAt'] != null
+          ? DateTime.parse(map['deadlineAt'])
+          : null,
+      updatedAt: map['updateAt'] != null
+          ? DateTime.parse(map['updateAt'])
+          : null,
+      createAt: map['createAt'] != null
+          ? DateTime.parse(map['createAt'])
+          : null,
+      priority: map['priority'],
+      user: map['user'] ?? "",
+    );
+  }
+
   String toJson() => json.encode(toMap());
 
   factory Todo.fromJson(String source) => Todo.fromMap(json.decode(source));

@@ -63,12 +63,6 @@ class _ListeTodoState extends ConsumerState<ListeTodo> {
                           )
                         ]),
                     child: ListTile(
-                      /*  voici les couleurs du text:
-                          -Bleue:La tâche est en cours  
-                          -Rouge:Délai expiré 
-                          -Bleu pas encore demarré
-                          -Vert: fini
-                         */
                       trailing: AppText(
                         todo.beginedAt == null &&
                                 DateTime.now().millisecondsSinceEpoch <

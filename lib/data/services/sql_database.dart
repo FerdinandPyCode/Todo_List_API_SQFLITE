@@ -72,7 +72,7 @@ class TodoDataBase {
       );
       for (int i = 0; i < resultat.length; i++) {
         print(resultat[i]);
-        allTodo.add(Todo.fromMap(resultat[i]));
+        allTodo.add(Todo.fromMap2(resultat[i]));
       }
       await TodoDataBase.close();
       return allTodo;
