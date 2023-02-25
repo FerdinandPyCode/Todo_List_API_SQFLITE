@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/data/services/users_service.dart';
 import 'package:todo_app/screens/login_screen.dart';
+import 'package:todo_app/utils/app_func.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -31,6 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       var result = await UserService.create(
           {'username': username, 'email': email, 'password': password});
       Fluttertoast.showToast(msg: "Utilisateur créé avec succès");
+      navigateToNextPage(context, const LoginScreen(), back: false);
     } on DioError catch (e) {
       Map<String, dynamic> error = e.response?.data;
       if (error.containsKey('message')) {

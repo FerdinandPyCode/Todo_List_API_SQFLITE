@@ -45,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Fluttertoast.showToast(msg: "Connexion effectuée avec succès");
       navigateToNextPage(context, const HomeState(), back: false);
     } on DioError catch (e) {
+      print(e);
       Map<String, dynamic> error = e.response?.data;
       if (error.containsKey('message')) {
         Fluttertoast.showToast(msg: error['message']);
