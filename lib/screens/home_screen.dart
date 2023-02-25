@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +94,10 @@ class _HomeState extends State<HomeState> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
+            final prefs = await SharedPreferences.getInstance();
+            prefs.clear();
+
             navigateToNextPage(context, const CreateStackScreem());
           },
           child: const Icon(Icons.add),

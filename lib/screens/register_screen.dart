@@ -64,21 +64,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                 Center(
-                  child:  Text(
+                const Center(
+                  child: Text(
                     "Inscription",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,color: AppColors.getGreenColor),
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
                   ),
                 ),
-                const SizedBox(height: 16.0,),
-                Center(
-                  child: SvgPicture.asset(
-                    'assets/register.svg',
-                    width: MediaQuery.of(context).size.width, 
-                    height: 320,
-                  ),
+                const SizedBox(
+                  height: 12.0,
                 ),
-                 const SizedBox(height: 16.0,),
+                SvgPicture.asset(
+                  'assets/register.svg',
+                  width: MediaQuery.of(context).size.width,
+                  height: 320,
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
                 const Text(
                   "Get Registered From Here",
                   style: TextStyle(fontSize: 12.0),
@@ -236,8 +239,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: TextStyle(fontSize: 17, color: Colors.green),
                     ),
                   ),
-                ), 
-                const SizedBox(height: 100.0,),
+                ),
+                const SizedBox(
+                  height: 100.0,
+                ),
               ],
             ),
           ),
