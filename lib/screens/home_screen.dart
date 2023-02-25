@@ -95,9 +95,6 @@ class _HomeState extends State<HomeState> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            final prefs = await SharedPreferences.getInstance();
-            prefs.clear();
-
             navigateToNextPage(context, const CreateStackScreem());
           },
           child: const Icon(Icons.add),

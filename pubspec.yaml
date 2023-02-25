@@ -46,6 +46,7 @@ dependencies:
   jwt_decode: ^0.3.1
   simple_animations: ^5.0.0+3
   flutter_svg: ^2.0.2
+  flutter_riverpod:
 
 dev_dependencies:
   flutter_test:

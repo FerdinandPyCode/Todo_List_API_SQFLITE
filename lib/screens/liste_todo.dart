@@ -14,7 +14,6 @@ class ListeTodo extends StatefulWidget {
 }
 
 class _ListeTodoState extends State<ListeTodo> {
-
   @override
   void initState() {
     super.initState();
@@ -22,7 +21,6 @@ class _ListeTodoState extends State<ListeTodo> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const AppText(
@@ -33,7 +31,7 @@ class _ListeTodoState extends State<ListeTodo> {
       ),
       body: SafeArea(
         child: FutureBuilder(
-          future:  TodoService.fetch(),
+          future: TodoService.fetch(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(
@@ -41,7 +39,7 @@ class _ListeTodoState extends State<ListeTodo> {
               );
             } else if (snapshot.hasData) {
               List<Todo> allTodos = snapshot.data ?? [];
-
+              
               if (allTodos.isEmpty) {
                 return const Center(
                   child: AppText("No task found !"),
@@ -56,29 +54,33 @@ class _ListeTodoState extends State<ListeTodo> {
                   itemBuilder: (context, index) {
                     Todo todo = allTodos[index];
                     return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10.0),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10.0),
                       width: double.infinity,
                       height: 80.0,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: AppColors.getWhiteColor, 
-                        boxShadow: [
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: AppColors.getWhiteColor,
+                          boxShadow: [
                             BoxShadow(
-                              color: AppColors.getGreenColor, 
+                              color: AppColors.getGreenColor,
                               spreadRadius: 2.0,
-                              offset: Offset(0, 1), 
+                              offset: const Offset(0, 1),
                               blurRadius: 3.0,
-
                             )
-                        ]
-                      ),
+                          ]),
                       child: ListTile(
                         /*  voici les couleurs du text:
                           -Bleue:La tâche est en cours  
                           -Rouge:Délai expiré 
                           -Bleu pas encore demarré
                          */
-                        trailing: AppText("Starting",color: AppColors.getGreenColor,size: 13.0,isNormal: false,),
+                        trailing: AppText(
+                          "Starting",
+                          color: AppColors.getGreenColor,
+                          size: 13.0,
+                          isNormal: false,
+                        ),
                         onTap: () {
                           navigateToNextPage(context, TodoDetail(todo: todo));
                         },
