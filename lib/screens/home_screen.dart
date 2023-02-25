@@ -38,6 +38,7 @@ class _HomeState extends ConsumerState<HomeState> {
   int fini = 0;
   int finiTot = 0;
   int finiRetard = 0;
+  int attente = 0;
 
   final gradientList = <Color>[
     const Color.fromRGBO(223, 250, 92, 1),
@@ -51,7 +52,6 @@ class _HomeState extends ConsumerState<HomeState> {
   ];
 
   loadTodo(List<Todo> liste) {
-    print("looooooooooooooooooo");
     for (Todo t in liste) {
       if (t.beginedAt != null) {
         commencer += 1;
@@ -68,6 +68,8 @@ class _HomeState extends ConsumerState<HomeState> {
             finiRetard += 1;
           }
         }
+      } else {
+        attente += 1;
       }
     }
 
@@ -117,6 +119,7 @@ class _HomeState extends ConsumerState<HomeState> {
               fini = 0;
               finiTot = 0;
               finiRetard = 0;
+              attente = 0;
               loadTodo(data);
               return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
